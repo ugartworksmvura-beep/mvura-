@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - mvura</title>
+<link rel="icon" type="image/svg+xml" href="/mvurafavicon.svg">
+<link rel="icon" type="image/x-icon" href="/mvurafavicon.ico">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* ========== FAQ PAGE SPECIFIC STYLES ========== */
+        .main-content {
+            margin-top: 70px;
+            padding: 0;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .faq-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .faq-header p {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .faq-search {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+
+        .faq-search input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .faq-search input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+        }
+
+        .faq-search i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 1.2rem;
+        }
+
+        .faq-category {
+            margin-bottom: 2.5rem;
+        }
+
+        .faq-category h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 0.75rem;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.1);
+        }
+
+        .faq-question {
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text);
+            background: rgba(var(--accent-rgb), 0.02);
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(var(--accent-rgb), 0.05);
+        }
+
+        .faq-question i {
+            color: var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: var(--bg);
+            border-top: 1px solid transparent;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px; /* adjust if needed */
+            border-top-color: var(--line);
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .faq-answer-content p {
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer-content ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-answer-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .faq-answer-content a:hover {
+            opacity: 0.8;
+        }
+
+        .faq-no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--muted);
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--line);
+        }
+
+        .faq-no-results i {
+            font-size: 3rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .faq-no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        @media (max-width: 768px) {
+            .faq-header h1 {
+                font-size: 2.2rem;
+            }
+            .faq-category h2 {
+                font-size: 1.5rem;
+            }
+            .faq-question {
+                padding: 1rem;
+            }
+            .faq-answer-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container" onclick="location.href='index.html'">
+                <div class="logo-emoji">💧</div>
+                <div class="logo-text">mvura</div>
+            </div>
+            <div class="header-page-title">FAQ</div>
+            <div class="menu-container">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Dropdown Menu -->
+    <nav class="dropdown-menu" id="dropdownMenu">
+        <button class="menu-close-btn" id="menuCloseBtn">✕</button>
+        <div class="menu-section">
+            <div class="menu-title">Navigation</div>
+            <a href="index.html" class="menu-link"><span class="menu-icon">🏠</span><span>Home</span></a>
+            <a href="store.html" class="menu-link"><span class="menu-icon">🎮</span><span>Games Store</span></a>
+            <a href="publish.html" class="menu-link" id="staticPublishLink"><span class="menu-icon">🚀</span><span>Publish Game</span></a>
+            <a href="news.html" class="menu-link"><span class="menu-icon">📰</span><span>News & Updates</span></a>
+            <a href="about.html" class="menu-link"><span class="menu-icon">👥</span><span>About Us</span></a>
+            <a href="contact.html" class="menu-link"><span class="menu-icon">☎️</span><span>Contact</span></a>
+        </div>
+        <div id="account-menu-container"></div>
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div style="padding: 0.75rem 1rem; color: var(--muted); font-size: 0.9rem;">
+                Switch between light and dark themes
+            </div>
+        </div>
+    </nav>
+
+    <!-- AUTH MODAL (updated with OTP signup) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-close" id="authCloseBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log in</button>
+                <button class="auth-tab" data-tab="signup">Create account</button>
+            </div>
+            
+            <!-- Login Form (unchanged) -->
+            <div id="loginForm" class="auth-form active">
+                <input type="tel" id="loginPhone" placeholder="Phone number" autocomplete="tel">
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <span class="toggle-eye" data-for="loginPassword">👁</span>
+                </div>
+                <button class="btn" id="modalLoginBtn">Log in</button>
+                <div class="forgot-link" id="forgotPasswordLink">Forgot password?</div>
+                <div class="demo-hint">Use your phone number and password</div>
+            </div>
+            
+            <!-- Signup Form with OTP -->
+            <div id="signupForm" class="auth-form">
+                <!-- Main signup form -->
+                <div id="signupMainForm">
+                    <input type="text" id="signupFirstName" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="signupLastName" placeholder="Last name" autocomplete="family-name">
+                    <input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="tel">
+                    <input type="email" id="signupEmail" placeholder="Email address (for recovery)" autocomplete="email">
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="signupPassword">👁</span>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="confirmPassword">👁</span>
+                    </div>
+                    <select id="signupRole">
+                        <option value="player" selected>🎮 Player</option>
+                        <option value="developer">🛠️ Developer</option>
+                    </select>
+                    <!-- Terms agreement checkbox -->
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; accent-color: var(--accent); transform: scale(1.2);">
+                        <label for="agreeTerms" style="color: var(--text); font-size: 0.9rem;">
+                            I agree to the <a href="terms.html" target="_blank" style="color: var(--accent);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color: var(--accent);">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button class="btn" id="modalSignupBtn">Sign up</button>
+                    <div class="demo-hint">Password stored with simple hash (demo)</div>
+                </div>
+
+                <!-- OTP verification section (initially hidden) -->
+                <div id="otpSection" style="display: none;">
+                    <p id="otpMessage" style="color: var(--text); margin-bottom: 1rem;"></p>
+                    <input type="text" id="otpCode" placeholder="6‑digit code" maxlength="6" pattern="\d{6}" style="margin-bottom: 1rem;">
+                    <button class="btn" id="verifyOtpBtn">Verify Code</button>
+                    <button class="btn btn-outline" id="cancelOtpBtn" style="margin-top: 0.5rem;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form (unchanged) -->
+            <div id="forgotPasswordForm" class="auth-form">
+                <h3 style="margin-bottom: 1.5rem;">Reset password</h3>
+                <input type="tel" id="resetPhone" placeholder="Phone number" autocomplete="tel">
+                <input type="email" id="resetEmail" placeholder="Email address (for verification)" autocomplete="email">
+                <button class="btn" id="sendResetCodeBtn">Send reset code</button>
+                
+                <div id="resetCodeSection" style="display: none;">
+                    <div style="margin: 1.5rem 0;"></div>
+                    <input type="text" id="resetCode" placeholder="6‑digit code">
+                    <div class="password-wrapper">
+                        <input type="password" id="resetNewPassword" placeholder="New password">
+                        <span class="toggle-eye" data-for="resetNewPassword">👁</span>
+                    </div>
+                    <button class="btn" id="confirmResetBtn">Reset password</button>
+                    <div class="demo-hint">🔎 Code will appear in console (demo)</div>
+                </div>
+                
+                <div class="back-to-login" id="backToLoginBtn">← Back to login</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-container">
+            <div class="faq-header">
+                <h1>Frequently Asked Questions</h1>
+                <p>Find answers to common questions about mvura, accounts, purchases, and game publishing.</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="faq-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="faqSearch" placeholder="Search FAQ...">
+            </div>
+
+            <!-- FAQ Categories -->
+            <div id="faqContainer">
+                <!-- Category: Getting Started -->
+                <div class="faq-category" data-category="getting-started">
+                    <h2>Getting Started</h2>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What is mvura?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>mvura is a game distribution platform based in Malawi that connects players with developers. We offer a wide range of games for mobile, PC, console, and web. Our mission is to provide transparent, fair, and sustainable digital distribution.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Do I need an account to download games?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>No, you can browse and download free games without an account. However, creating a free account allows you to purchase games, track your downloads, leave reviews, and if you're a developer, publish your own games.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is mvura free to use?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes, creating an account and browsing the store is completely free. Many games are also free to download. We only charge for games marked as "Paid" or "Premium", and developers pay a 15% platform fee on their sales.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category: Accounts & Profile -->
+                <div class="faq-category" data-category="accounts">
+                    <h2>Accounts & Profile</h2>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I create an account?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Click the "Sign In" button in the top menu, then select "Create Account". You'll need to provide your first name, last name, phone number (Malawi format: 099xxxxxxx or +2659xxxxxxxx), and email address. Choose a password and select your role (Player or Developer). You must agree to our Terms of Service and Privacy Policy. After clicking "Sign up", you'll receive a verification code via SMS (simulated in demo) to confirm your phone number. Once verified, you'll be logged in automatically.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>I forgot my password. How can I reset it?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>On the login modal, click "Forgot password?". Enter your phone number and the email address you used to register. You'll receive a 6‑digit reset code (check the browser console – this is a demo feature). Enter the code and your new password to reset it.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I change my profile information?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Once logged in, open the menu and click on "Account". There you can edit your first name, last name, email, bio (for developers), website, and upload a profile picture. Don't forget to click "Save Changes".</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I delete my account?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes, you can delete your account from the Account page. Scroll to the bottom and click "Delete Account". Please note that this action is permanent and will remove your profile, reviews, and any unpublished games. If you're a developer with published games, you must contact support to handle existing content.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category: Buying & Downloading Games -->
+                <div class="faq-category" data-category="purchases">
+                    <h2>Buying & Downloading Games</h2>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What payment methods do you accept?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>We currently accept Airtel Money and TNM Mpamba (Malawi's leading mobile money services). All prices are displayed in Malawian Kwacha (MWK). We plan to add additional payment options in the future.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How does the payment process work?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>When you click "Buy Now" on a game, a payment modal appears. Select your payment method (Airtel Money or TNM Mpamba), enter your phone number (e.g., 0991234567), and confirm. You will receive a USSD prompt on your phone to authorise the payment. After successful payment, your download will start automatically.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I get a refund?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Due to the digital nature of games, purchases are generally non‑refundable. However, if a game is defective or not as described, you may request a refund within 14 days by contacting <a href="mailto:support@mvura.games">support@mvura.games</a>. Each request will be evaluated individually. Statutory rights under the Malawi Consumer Protection Act apply.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Where are my downloaded games stored?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Games are downloaded directly to your device. On mobile, they will typically be in your "Downloads" folder. On PC, you can choose the download location. You can also access your purchased games anytime from your Library.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What if my download fails?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>If a download fails, you can retry from your Library. If the problem persists, check your internet connection or contact support with the game name and your account details.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category: Developers & Publishing -->
+                <div class="faq-category" data-category="developers">
+                    <h2>Developers & Publishing</h2>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I become a developer?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>If you signed up as a player, you can upgrade to a developer role from the <a href="publish.html">Publish page</a>. Click "Upgrade to Developer" – this will instantly change your role. If you're creating a new account, select "Developer" as your role during signup.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How much does it cost to publish a game?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Publishing a game on mvura is completely free. There are no upfront fees. We only take a 15% platform fee on revenue generated from game sales. You keep 85% of every sale.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I upload my game?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Once you're a developer, go to the <a href="publish.html">Publish page</a> and click "Start Upload". Fill in the game details (title, description, genre, price, etc.), provide cover art and screenshots, and upload your game file (APK for mobile, ZIP for PC/console). You also need to provide a Backblaze B2 file key – this is where your game file is stored. After submission, our team will review your game (usually within 1‑3 business days).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What are the revenue payouts?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Payouts are processed monthly. You'll receive 85% of the net revenue from your game sales. The minimum payout threshold is MWK 5,000. Payments are sent via Airtel Money or TNM Mpamba (the same method you use for purchases). You can track your earnings in the Developer Dashboard.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I update my game after publishing?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes. In your Developer Dashboard, you'll find options to upload new versions of your games. Each version will go through a review process before being published to ensure quality and security.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category: Technical Support -->
+                <div class="faq-category" data-category="support">
+                    <h2>Technical Support</h2>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>The website is slow or not loading properly.</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>First, try refreshing the page or clearing your browser cache. If the issue persists, check your internet connection. You can also try a different browser. If the problem continues, contact support with details of the issue.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>I'm having trouble with a game I downloaded.</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Check the game's system requirements to ensure your device is compatible. If the game crashes or has bugs, you can leave a review and contact the developer directly through their profile. For issues with the download file, contact <a href="mailto:support@mvura.games">support@mvura.games</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I report a bug on the mvura platform?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Please email <a href="mailto:support@mvura.games">support@mvura.games</a> with a description of the bug, steps to reproduce it, and your browser/device information. Screenshots are very helpful.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category: Privacy & Legal -->
+                <div class="faq-category" data-category="legal">
+                    <h2>Privacy & Legal</h2>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do you protect my personal information?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>We take data protection seriously. All data transmitted between your browser and our servers is encrypted using SSL/TLS. We store personal information securely and never share it with third parties without your consent, except as required by law. For full details, please read our <a href="privacy.html">Privacy Policy</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What are cookies and how do you use them?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Cookies are small text files stored on your device. We use essential cookies to keep you logged in and remember your preferences. We also use analytics cookies (via Google Analytics) to understand how visitors use our site, which helps us improve. You can manage cookie preferences in your browser settings. See our <a href="cookies.html">Cookie Policy</a> for more.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I report copyright infringement?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>If you believe a game on mvura infringes your copyright, please send a takedown notice to <a href="mailto:copyright@mvura.games">copyright@mvura.games</a> with the required information (see our <a href="dmca.html">DMCA page</a> for details). We will respond promptly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No results message (hidden by default) -->
+            <div class="faq-no-results" id="faqNoResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>No matching questions</h3>
+                <p>Try different keywords or browse the categories above.</p>
+            </div>
+
+            <!-- Still need help? -->
+            <div style="text-align: center; margin: 4rem 0 2rem;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--text);">Still need help?</h2>
+                <p style="color: var(--muted); margin-bottom: 2rem;">If you couldn't find an answer, feel free to contact our support team.</p>
+                <a href="contact.html" class="about-cta-button" style="display: inline-flex; align-items: center; gap: 0.75rem; background: var(--accent); color: white; padding: 1rem 2.5rem; border-radius: 12px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">Contact Support <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <nav class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="cookies.html" class="footer-link">Cookie Policy</a>
+                <a href="dmca.html" class="footer-link">DMCA</a>
+                <a href="faq.html" class="footer-link">FAQ</a>
+                <a href="accessibility.html" class="footer-link">Accessibility</a>
+            </nav>
+            <p class="footer-info">
+                For game submissions or support: <a href="mailto:ugartworks.comp@gmail.com" class="footer-email">ugartworks.comp@gmail.com</a>
+            </p>
+            <div class="footer-copyright">
+                © 2026 mvura Game Platform. All rights reserved. UG ARTWORKS | Designed by James Mlelemba
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><span>↑</span></button>
+
+    <!-- External Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+
+    <!-- Page‑Specific Script -->
+    <script>
+        (function() {
+            // Toggle FAQ items
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.getElementById('faqSearch');
+            const faqContainer = document.getElementById('faqContainer');
+            const noResults = document.getElementById('faqNoResults');
+            const categories = document.querySelectorAll('.faq-category');
+            const allItems = document.querySelectorAll('.faq-item');
+
+            function filterFAQ() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                let anyVisible = false;
+
+                if (searchTerm === '') {
+                    categories.forEach(cat => cat.style.display = 'block');
+                    allItems.forEach(item => item.style.display = 'block');
+                    noResults.style.display = 'none';
+                    return;
+                }
+
+                categories.forEach(cat => cat.style.display = 'none');
+
+                allItems.forEach(item => {
+                    const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer-content').textContent.toLowerCase();
+                    const matches = question.includes(searchTerm) || answer.includes(searchTerm);
+                    
+                    if (matches) {
+                        const parentCategory = item.closest('.faq-category');
+                        if (parentCategory) {
+                            parentCategory.style.display = 'block';
+                        }
+                        item.style.display = 'block';
+                        anyVisible = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                categories.forEach(cat => {
+                    const catTitle = cat.querySelector('h2').textContent.toLowerCase();
+                    if (catTitle.includes(searchTerm)) {
+                        cat.style.display = 'block';
+                        cat.querySelectorAll('.faq-item').forEach(item => item.style.display = 'block');
+                        anyVisible = true;
+                    }
+                });
+
+                noResults.style.display = anyVisible ? 'none' : 'block';
+            }
+
+            searchInput.addEventListener('input', filterFAQ);
+
+            // Back to top
+            const backToTopBtn = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                backToTopBtn.classList.toggle('visible', window.pageYOffset > 300);
+            });
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                backToTopBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => backToTopBtn.style.transform = '', 200);
+            });
+        })();
+    </script>
+</body>
+</html>

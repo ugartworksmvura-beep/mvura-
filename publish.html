@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>Publish Game - mvura</title>
+<link rel="icon" type="image/svg+xml" href="/mvurafavicon.svg">
+<link rel="icon" type="image/x-icon" href="/mvurafavicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* ========== PUBLISH PAGE SPECIFIC STYLES ========== */
+        :root {
+            --radius: 12px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* Main content - offset for fixed header */
+        .main-content {
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+            padding: 2rem 0 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-top: 60px;
+                min-height: calc(100vh - 60px);
+                padding: 1.5rem 0 2rem;
+            }
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 0 0 2rem 0;
+        }
+
+        .section-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #4a9c8a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .publish-option {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            text-align: center;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .publish-option:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .option-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .option-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .option-description {
+            color: var(--muted);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .option-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        .option-btn:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.25);
+        }
+
+        .option-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .option-btn.secondary:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .developer-dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .upload-section {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .upload-form {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.95rem;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-select[multiple] {
+            min-height: 120px;
+        }
+
+        .form-help {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        /* File upload area styling */
+        .file-upload-area {
+            border: 2px dashed var(--line);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            background: var(--bg);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--accent);
+            background: rgba(var(--accent-rgb), 0.05);
+        }
+
+        .file-upload-icon {
+            font-size: 2.5rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-text {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .file-upload-subtext {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Upload progress (simulated) */
+        .upload-progress {
+            margin: 0.5rem 0;
+            height: 4px;
+            background: var(--line);
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .upload-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+            transition: width 0.2s;
+        }
+
+        .upload-status {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 0.25rem;
+        }
+
+        .form-options {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+            background: var(--bg);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .form-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            border-radius: 4px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn-large {
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .revenue-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin: 3rem 0;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .revenue-card {
+            background: rgba(var(--accent-rgb), 0.05);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .revenue-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .revenue-label {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .developer-dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .upload-section {
+                padding: 1.5rem;
+            }
+
+            .header-page-title {
+                display: none;
+            }
+
+            .page-container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-header h1 {
+                font-size: 2rem;
+            }
+
+            .publish-option {
+                padding: 1.5rem;
+            }
+
+            .option-btn {
+                padding: 0.9rem 1rem;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container" onclick="location.href='index.html'">
+                <div class="logo-emoji">💧</div>
+                <div class="logo-text">mvura</div>
+            </div>
+            <div class="header-page-title">PUBLISH GAME</div>
+            <div class="menu-container">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Overlay & Dropdown -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <nav class="dropdown-menu" id="dropdownMenu">
+        <button class="menu-close-btn" id="menuCloseBtn">✕</button>
+        <div class="menu-section">
+            <div class="menu-title">Navigation</div>
+            <a href="index.html" class="menu-link"><span class="menu-icon">🏠</span><span>Home</span></a>
+            <a href="store.html" class="menu-link"><span class="menu-icon">🎮</span><span>Games Store</span></a>
+            <a href="publish.html" class="menu-link active" id="staticPublishLink"><span class="menu-icon">🚀</span><span>Publish Game</span></a>
+            <a href="news.html" class="menu-link"><span class="menu-icon">📰</span><span>News & Updates</span></a>
+            <a href="about.html" class="menu-link"><span class="menu-icon">👥</span><span>About Us</span></a>
+            <a href="contact.html" class="menu-link"><span class="menu-icon">☎️</span><span>Contact</span></a>
+        </div>
+        <div id="account-menu-container"></div>
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div style="padding:0.75rem 1rem; color:var(--muted); font-size:0.9rem;">Switch between light and dark themes</div>
+        </div>
+    </nav>
+
+    <!-- AUTH MODAL (updated with OTP) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-close" id="authCloseBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log in</button>
+                <button class="auth-tab" data-tab="signup">Create account</button>
+            </div>
+            
+            <!-- Login Form (unchanged) -->
+            <div id="loginForm" class="auth-form active">
+                <input type="tel" id="loginPhone" placeholder="Phone number" autocomplete="tel">
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <span class="toggle-eye" data-for="loginPassword">👁</span>
+                </div>
+                <button class="btn" id="modalLoginBtn">Log in</button>
+                <div class="forgot-link" id="forgotPasswordLink">Forgot password?</div>
+                <div class="demo-hint">Use your phone number and password</div>
+            </div>
+            
+            <!-- Signup Form with OTP (updated) -->
+            <div id="signupForm" class="auth-form">
+                <!-- Main signup form (visible first) -->
+                <div id="signupMainForm">
+                    <input type="text" id="signupFirstName" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="signupLastName" placeholder="Last name" autocomplete="family-name">
+                    <input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="tel">
+                    <input type="email" id="signupEmail" placeholder="Email address (for recovery)" autocomplete="email">
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="signupPassword">👁</span>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="confirmPassword">👁</span>
+                    </div>
+                    <select id="signupRole">
+                        <option value="player" selected>🎮 Player</option>
+                        <option value="developer">🛠️ Developer</option>
+                    </select>
+                    <!-- Terms agreement checkbox -->
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; accent-color: var(--accent); transform: scale(1.2);">
+                        <label for="agreeTerms" style="color: var(--text); font-size: 0.9rem;">
+                            I agree to the <a href="terms.html" target="_blank" style="color: var(--accent);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color: var(--accent);">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button class="btn" id="modalSignupBtn">Sign up</button>
+                    <div class="demo-hint">Password stored with simple hash (demo)</div>
+                </div>
+
+                <!-- OTP verification section (initially hidden) -->
+                <div id="otpSection" style="display: none;">
+                    <p id="otpMessage" style="color: var(--text); margin-bottom: 1rem;"></p>
+                    <input type="text" id="otpCode" placeholder="6‑digit code" maxlength="6" pattern="\d{6}" style="margin-bottom: 1rem; width: 100%;">
+                    <button class="btn" id="verifyOtpBtn">Verify Code</button>
+                    <button class="btn btn-outline" id="cancelOtpBtn" style="margin-top: 0.5rem;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form (unchanged) -->
+            <div id="forgotPasswordForm" class="auth-form">
+                <h3 style="margin-bottom: 1.5rem;">Reset password</h3>
+                <input type="tel" id="resetPhone" placeholder="Phone number" autocomplete="tel">
+                <input type="email" id="resetEmail" placeholder="Email address (for verification)" autocomplete="email">
+                <button class="btn" id="sendResetCodeBtn">Send reset code</button>
+                
+                <div id="resetCodeSection" style="display: none;">
+                    <div style="margin: 1.5rem 0;"></div>
+                    <input type="text" id="resetCode" placeholder="6‑digit code">
+                    <div class="password-wrapper">
+                        <input type="password" id="resetNewPassword" placeholder="New password">
+                        <span class="toggle-eye" data-for="resetNewPassword">👁</span>
+                    </div>
+                    <button class="btn" id="confirmResetBtn">Reset password</button>
+                    <div class="demo-hint">🔎 Code will appear in console (demo)</div>
+                </div>
+                
+                <div class="back-to-login" id="backToLoginBtn">← Back to login</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-container">
+            <div class="section-header">
+                <h1>Publish Your Game</h1>
+                <p class="section-subtitle">Share your creation with the world – developer accounts required.</p>
+            </div>
+
+            <div id="publishContent"></div>
+
+            <!-- Revenue Section -->
+            <div class="revenue-section">
+                <h2 style="text-align: center; margin-bottom: 1rem;">Developer Revenue Share</h2>
+                <p style="text-align: center; color: var(--muted); max-width: 800px; margin: 0 auto 2rem;">
+                    mvura offers one of the best revenue shares in the industry. Keep more of what you earn.
+                </p>
+                <div class="revenue-grid">
+                    <div class="revenue-card"><div class="revenue-number">85%</div><div class="revenue-label">Developer Share</div></div>
+                    <div class="revenue-card"><div class="revenue-number">15%</div><div class="revenue-label">Platform Fee</div></div>
+                    <div class="revenue-card"><div class="revenue-number">30 days</div><div class="revenue-label">Payout Cycle</div></div>
+                    <div class="revenue-card"><div class="revenue-number">$0</div><div class="revenue-label">Upload Fees</div></div>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="color: var(--muted); font-size: 0.9rem;">* No hidden fees. Transparent pricing. Payouts via PayPal, Bank Transfer, or Cryptocurrency.</p>
+                </div>
+            </div>
+
+            <!-- Submission Guidelines -->
+            <div class="publish-option" style="margin-top: 3rem;">
+                <h3 style="margin-bottom: 1.5rem;">Submission Guidelines</h3>
+                <ul style="list-style: none; padding: 0; margin-bottom: 2rem; text-align: left;">
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative; color: var(--muted);">✓ Games must be your original work or you must have distribution rights</li>
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative; color: var(--muted);">✓ No viruses, malware, or harmful content</li>
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative; color: var(--muted);">✓ Appropriate content ratings must be accurate</li>
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative; color: var(--muted);">✓ Games should be properly tested and functional</li>
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative; color: var(--muted);">✓ Clear installation instructions if needed</li>
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative; color: var(--muted);">✓ Respect copyright and intellectual property rights</li>
+                </ul>
+                <div style="background: rgba(var(--accent-rgb), 0.1); padding: 1rem; border-radius: var(--radius); margin-top: 1rem;">
+                    <p style="margin: 0; color: var(--muted); font-size: 0.9rem;"><strong>Note:</strong> All games go through a review process which typically takes 1-3 business days. You'll be notified via email once your game is approved and published.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <nav class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="cookies.html" class="footer-link">Cookie Policy</a>
+                <a href="dmca.html" class="footer-link">DMCA</a>
+                <a href="faq.html" class="footer-link">FAQ</a>
+                <a href="accessibility.html" class="footer-link">Accessibility</a>
+            </nav>
+            <p class="footer-info">
+                For game submissions or support: <a href="mailto:ugartworks.comp@gmail.com" class="footer-email">ugartworks.comp@gmail.com</a>
+            </p>
+            <div class="footer-copyright">
+                © 2026 mvura Game Platform. All rights reserved. UG ARTWORKS | Designed by James Mlelemba
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><span>↑</span></button>
+
+    <!-- External Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+
+    <!-- Page‑Specific Script (unchanged) -->
+    <script>
+        // ========== PUBLISH PAGE SCRIPT ==========
+        const publishContent = document.getElementById('publishContent');
+        const STORAGE_USERS = 'mvura_users'; // still needed for upgrade
+
+        function getUsers() {
+            return JSON.parse(localStorage.getItem(STORAGE_USERS)) || [];
+        }
+        function saveUsers(users) {
+            localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+        }
+
+        function renderPublishContent() {
+            if (!publishContent) return;
+
+            if (!Auth.isLoggedIn()) {
+                publishContent.innerHTML = `
+                    <div class="publish-option" style="max-width:600px; margin:0 auto;">
+                        <div class="option-icon">🔐</div>
+                        <h3 class="option-title">Sign in to publish</h3>
+                        <p class="option-description">
+                            You need a mvura developer account to upload games.  
+                            Already have one? Sign in below, or create a new account in seconds.
+                        </p>
+                        <div style="display:flex; gap:1rem; margin-top:2rem; flex-wrap:wrap;">
+                            <button class="option-btn" id="signInFromPublish">Sign In</button>
+                            <button class="option-btn secondary" id="signUpFromPublish">Create Account</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('signInFromPublish')?.addEventListener('click', () => Auth.openAuthModal('login'));
+                document.getElementById('signUpFromPublish')?.addEventListener('click', () => Auth.openAuthModal('signup'));
+                return;
+            }
+
+            const currentUser = Auth.getCurrentUser();
+            if (currentUser.role !== 'developer') {
+                publishContent.innerHTML = `
+                    <div class="publish-option" style="max-width:600px; margin:0 auto;">
+                        <div class="option-icon">👤 → 🚀</div>
+                        <h3 class="option-title">Become a developer</h3>
+                        <p class="option-description">
+                            You're currently a player. To publish games, upgrade to a developer account – it’s free and only takes a moment.
+                        </p>
+                        <button class="option-btn" id="upgradeToDeveloperBtn">Upgrade to Developer</button>
+                    </div>
+                `;
+                document.getElementById('upgradeToDeveloperBtn')?.addEventListener('click', function() {
+                    const users = getUsers();
+                    const userIndex = users.findIndex(u => u.phone === currentUser.phone);
+                    if (userIndex !== -1) {
+                        users[userIndex].role = 'developer';
+                        saveUsers(users);
+                        Auth.setAuthState(true, { ...currentUser, role: 'developer' });
+                        alert('✅ You are now a developer! You can upload games.');
+                    }
+                });
+                return;
+            }
+
+            // Logged in as developer – show dashboard and upload form
+            publishContent.innerHTML = `
+                <div class="developer-dashboard-grid" id="developerDashboardGrid">
+                    <div class="publish-option">
+                        <div class="option-icon">📦</div>
+                        <h3 class="option-title">Upload new game</h3>
+                        <p class="option-description">Submit a new game for review. Fill in the details and upload your build.</p>
+                        <button class="option-btn" id="showUploadFormBtn">Start Upload</button>
+                    </div>
+                    <div class="publish-option">
+                        <div class="option-icon">📊</div>
+                        <h3 class="option-title">Manage your games</h3>
+                        <p class="option-description">View analytics, update builds, track revenue, and edit listings.</p>
+                        <a href="admin/dashboard.html" class="option-btn">Go to Dashboard</a>
+                    </div>
+                </div>
+                <div id="developerUploadFormContainer" style="display: none;">
+                    <div class="upload-section">
+                        <h2 style="margin-bottom:2rem; text-align:center;">Upload New Game</h2>
+                        <form class="upload-form" id="developerUploadForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Game Title *</label>
+                                    <input type="text" class="form-input" id="gameTitle" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Price (MWK) *</label>
+                                    <input type="number" class="form-input" id="gamePrice" min="0" required>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">Description *</label>
+                                <textarea class="form-textarea" id="gameDescription" rows="4" required></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Genre *</label>
+                                    <select class="form-select" id="gameGenre" multiple required>
+                                        <option value="action">Action</option>
+                                        <option value="adventure">Adventure</option>
+                                        <option value="strategy">Strategy</option>
+                                        <option value="puzzle">Puzzle</option>
+                                        <option value="rpg">RPG</option>
+                                        <option value="racing">Racing</option>
+                                        <option value="simulation">Simulation</option>
+                                        <option value="educational">Educational</option>
+                                    </select>
+                                    <small class="form-help">Hold Ctrl/Cmd to select multiple</small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Age Rating *</label>
+                                    <select class="form-select" id="gameAgeRating" required>
+                                        <option value="3+">3+ (Everyone)</option>
+                                        <option value="7+">7+ (Everyone)</option>
+                                        <option value="12+">12+ (Teen)</option>
+                                        <option value="16+">16+ (Mature)</option>
+                                        <option value="18+">18+ (Adults Only)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Developer</label>
+                                    <input type="text" class="form-input" id="gameDeveloper" value="UG Artworks">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Version</label>
+                                    <input type="text" class="form-input" id="gameVersion" value="1.0.0">
+                                </div>
+                            </div>
+
+                            <!-- TRAILER UPLOAD (NEW) -->
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label class="form-label">Trailer Video</label>
+                                    <div class="file-upload-area" id="trailerUploadArea">
+                                        <div class="file-upload-icon">🎬</div>
+                                        <div class="file-upload-text">Click or drop video file</div>
+                                        <div class="file-upload-subtext">MP4, MOV, etc. (max 500MB)</div>
+                                    </div>
+                                    <input type="file" id="trailerFileInput" accept="video/*" style="display: none;">
+                                    <div class="upload-progress" id="trailerProgress">
+                                        <div class="upload-progress-bar" id="trailerProgressBar"></div>
+                                    </div>
+                                    <div class="upload-status" id="trailerStatus"></div>
+                                    <!-- Keep original URL field, now readonly and filled automatically -->
+                                    <label class="form-label" style="margin-top:0.5rem;">YouTube Embed URL (auto‑filled)</label>
+                                    <input type="url" class="form-input" id="gameTrailer" placeholder="Will be auto‑filled" readonly>
+                                    <small class="form-help">After upload, we'll generate an embed URL for you.</small>
+                                </div>
+                            </div>
+
+                            <!-- COVER IMAGE UPLOAD (NEW) -->
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label class="form-label">Cover Image</label>
+                                    <div class="file-upload-area" id="coverUploadArea">
+                                        <div class="file-upload-icon">🖼️</div>
+                                        <div class="file-upload-text">Click or drop image file</div>
+                                        <div class="file-upload-subtext">16:9 aspect ratio recommended (max 10MB)</div>
+                                    </div>
+                                    <input type="file" id="coverFileInput" accept="image/*" style="display: none;">
+                                    <div class="upload-progress" id="coverProgress">
+                                        <div class="upload-progress-bar" id="coverProgressBar"></div>
+                                    </div>
+                                    <div class="upload-status" id="coverStatus"></div>
+                                    <!-- Keep original cover URL field, now readonly and filled automatically -->
+                                    <label class="form-label" style="margin-top:0.5rem;">Cover Image URL (auto‑filled)</label>
+                                    <input type="url" class="form-input" id="gameCover" placeholder="Will be auto‑filled" readonly required>
+                                </div>
+                            </div>
+
+                            <!-- SCREENSHOTS UPLOAD (NEW) -->
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label class="form-label">Screenshots (up to 5)</label>
+                                    <div class="file-upload-area" id="screenshotsUploadArea">
+                                        <div class="file-upload-icon">📸</div>
+                                        <div class="file-upload-text">Click or drop screenshot images</div>
+                                        <div class="file-upload-subtext">Select multiple files (max 5, each up to 5MB)</div>
+                                    </div>
+                                    <input type="file" id="screenshotsFileInput" multiple accept="image/*" style="display: none;">
+                                    <div class="upload-progress" id="screenshotsProgress">
+                                        <div class="upload-progress-bar" id="screenshotsProgressBar"></div>
+                                    </div>
+                                    <div class="upload-status" id="screenshotsStatus"></div>
+                                    <!-- Keep original screenshot URL textarea, now readonly and filled automatically -->
+                                    <label class="form-label" style="margin-top:0.5rem;">Screenshot URLs (auto‑filled, one per line)</label>
+                                    <textarea class="form-textarea" id="gameScreenshots" rows="4" placeholder="Will be auto‑filled" readonly></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="form-label">Device Requirements *</label>
+                                <textarea class="form-textarea" id="gameRequirements" rows="3" placeholder="Android 8.0+, 2GB RAM, 500MB storage" required></textarea>
+                            </div>
+
+                            <!-- GAME FILE UPLOAD (existing) -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Game File (APK/ZIP)</label>
+                                    <div class="file-upload-area" id="fileUploadArea">
+                                        <div class="file-upload-icon">📁</div>
+                                        <div class="file-upload-text">Drop file or click to browse</div>
+                                        <div class="file-upload-subtext">.apk or .zip, max 2GB</div>
+                                    </div>
+                                    <input type="file" id="gameFileInput" accept=".apk,.zip" style="display: none;">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Backblaze B2 File Key *</label>
+                                    <input type="text" class="form-input" id="b2FileKey" placeholder="games/my-game.apk" required>
+                                    <small class="form-help">The path to your game file in your B2 bucket (e.g., games/my-game.apk)</small>
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="form-label">Options</label>
+                                <div class="form-options">
+                                    <label class="form-checkbox">
+                                        <input type="checkbox" id="featuredGame"> <span>Mark as featured</span>
+                                    </label>
+                                    <label class="form-checkbox">
+                                        <input type="checkbox" id="newRelease"> <span>Mark as new release</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width text-center" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                <button type="submit" class="option-btn" style="width: auto; min-width: 150px;">
+                                    <i class="fas fa-upload"></i> Upload Game
+                                </button>
+                                <button type="button" class="option-btn secondary" id="previewBtn" style="width: auto; min-width: 150px;">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                                <button type="button" class="option-btn secondary" id="cancelUploadFormBtn" style="width: auto; min-width: 150px;">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+
+            // ========== FILE UPLOAD SIMULATION LOGIC ==========
+            const dashboardGrid = document.getElementById('developerDashboardGrid');
+            const formContainer = document.getElementById('developerUploadFormContainer');
+            const showUploadBtn = document.getElementById('showUploadFormBtn');
+            const cancelBtn = document.getElementById('cancelUploadFormBtn');
+            
+            // Existing file upload for game file
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const gameFileInput = document.getElementById('gameFileInput');
+
+            // New file inputs
+            const trailerUploadArea = document.getElementById('trailerUploadArea');
+            const trailerFileInput = document.getElementById('trailerFileInput');
+            const trailerProgress = document.getElementById('trailerProgress');
+            const trailerProgressBar = document.getElementById('trailerProgressBar');
+            const trailerStatus = document.getElementById('trailerStatus');
+            const gameTrailer = document.getElementById('gameTrailer');
+
+            const coverUploadArea = document.getElementById('coverUploadArea');
+            const coverFileInput = document.getElementById('coverFileInput');
+            const coverProgress = document.getElementById('coverProgress');
+            const coverProgressBar = document.getElementById('coverProgressBar');
+            const coverStatus = document.getElementById('coverStatus');
+            const gameCover = document.getElementById('gameCover');
+
+            const screenshotsUploadArea = document.getElementById('screenshotsUploadArea');
+            const screenshotsFileInput = document.getElementById('screenshotsFileInput');
+            const screenshotsProgress = document.getElementById('screenshotsProgress');
+            const screenshotsProgressBar = document.getElementById('screenshotsProgressBar');
+            const screenshotsStatus = document.getElementById('screenshotsStatus');
+            const gameScreenshots = document.getElementById('gameScreenshots');
+
+            // Helper to reset file upload area (for game file)
+            function resetFileUploadArea() {
+                if (fileUploadArea) {
+                    fileUploadArea.innerHTML = `
+                        <div class="file-upload-icon">📁</div>
+                        <div class="file-upload-text">Drop file or click to browse</div>
+                        <div class="file-upload-subtext">.apk or .zip, max 2GB</div>
+                    `;
+                }
+                if (gameFileInput) gameFileInput.value = '';
+            }
+
+            // Simulate upload for a single file
+            function simulateUpload(file, progressBar, statusEl, callback) {
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10 + 5;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        if (callback) callback();
+                    }
+                    progressBar.style.width = progress + '%';
+                }, 200);
+            }
+
+            // Trailer upload simulation
+            if (trailerUploadArea && trailerFileInput) {
+                trailerUploadArea.addEventListener('click', () => trailerFileInput.click());
+                trailerFileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    trailerProgress.style.display = 'block';
+                    trailerStatus.textContent = 'Uploading trailer...';
+                    simulateUpload(file, trailerProgressBar, trailerStatus, () => {
+                        trailerStatus.textContent = 'Upload complete! Processing video...';
+                        // Simulate YouTube processing
+                        setTimeout(() => {
+                            const videoId = 'dQw4w9WgXcQ'; // fake ID
+                            gameTrailer.value = `https://www.youtube.com/embed/${videoId}`;
+                            trailerStatus.textContent = 'Video processed and embedded!';
+                        }, 2000);
+                    });
+                });
+            }
+
+            // Cover image upload simulation
+            if (coverUploadArea && coverFileInput) {
+                coverUploadArea.addEventListener('click', () => coverFileInput.click());
+                coverFileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    coverProgress.style.display = 'block';
+                    coverStatus.textContent = 'Uploading cover image...';
+                    simulateUpload(file, coverProgressBar, coverStatus, () => {
+                        coverStatus.textContent = 'Upload complete!';
+                        // Fake cloud storage URL
+                        const fakeUrl = 'https://storage.mvura.games/covers/' + Date.now() + '.jpg';
+                        gameCover.value = fakeUrl;
+                        coverStatus.textContent = 'Cover image ready!';
+                    });
+                });
+            }
+
+            // Screenshots upload simulation (multiple files)
+            if (screenshotsUploadArea && screenshotsFileInput) {
+                screenshotsUploadArea.addEventListener('click', () => screenshotsFileInput.click());
+                screenshotsFileInput.addEventListener('change', function(e) {
+                    const files = Array.from(e.target.files);
+                    if (files.length === 0) return;
+                    screenshotsProgress.style.display = 'block';
+                    screenshotsStatus.textContent = `Uploading ${files.length} screenshot(s)...`;
+                    
+                    let completed = 0;
+                    const total = files.length;
+                    
+                    function uploadNext() {
+                        if (completed >= total) {
+                            screenshotsStatus.textContent = 'All screenshots uploaded!';
+                            // Generate fake URLs
+                            const urls = files.map((f, i) => 
+                                `https://storage.mvura.games/screenshots/${Date.now()}_${i}.jpg`
+                            ).join('\n');
+                            gameScreenshots.value = urls;
+                            return;
+                        }
+                        // Simulate each file upload
+                        const fakeProgress = setInterval(() => {
+                            const bar = screenshotsProgressBar;
+                            const current = parseFloat(bar.style.width) || 0;
+                            if (current >= 100) {
+                                clearInterval(fakeProgress);
+                                completed++;
+                                bar.style.width = '0%';
+                                screenshotsStatus.textContent = `Uploaded ${completed}/${total} screenshots...`;
+                                uploadNext();
+                            } else {
+                                bar.style.width = (current + 5) + '%';
+                            }
+                        }, 50);
+                    }
+                    uploadNext();
+                });
+            }
+
+            // Existing file upload logic for game file (unchanged)
+            fileUploadArea?.addEventListener('click', () => gameFileInput.click());
+            gameFileInput?.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) {
+                    resetFileUploadArea();
+                    return;
+                }
+                if (file.size > 2 * 1024 * 1024 * 1024) {
+                    alert('File size exceeds 2GB. Please select a smaller file.');
+                    gameFileInput.value = '';
+                    resetFileUploadArea();
+                    return;
+                }
+                const fileName = file.name;
+                fileUploadArea.innerHTML = `
+                    <div class="file-upload-icon">✅</div>
+                    <div class="file-upload-text" style="color: var(--success);">${fileName}</div>
+                    <div class="file-upload-subtext">Click to change</div>
+                `;
+            });
+
+            // Drag & drop for game file (existing)
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                fileUploadArea?.addEventListener(eventName, preventDefaults, false);
+            });
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            fileUploadArea?.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length > 0) {
+                    const file = files[0];
+                    if (file.size > 2 * 1024 * 1024 * 1024) {
+                        alert('File size exceeds 2GB. Please select a smaller file.');
+                        return;
+                    }
+                    const fileName = file.name;
+                    fileUploadArea.innerHTML = `
+                        <div class="file-upload-icon">✅</div>
+                        <div class="file-upload-text" style="color: var(--success);">${fileName}</div>
+                        <div class="file-upload-subtext">Click to change</div>
+                    `;
+                    gameFileInput.files = files;
+                }
+            });
+
+            // Cancel button (unchanged)
+            showUploadBtn?.addEventListener('click', () => {
+                dashboardGrid.style.display = 'none';
+                formContainer.style.display = 'block';
+                showUploadBtn.disabled = true;
+                window.scrollTo({ top: formContainer.offsetTop - 20, behavior: 'smooth' });
+            });
+
+            cancelBtn?.addEventListener('click', () => {
+                if (confirm('Are you sure you want to discard this upload?')) {
+                    formContainer.style.display = 'none';
+                    dashboardGrid.style.display = 'grid';
+                    showUploadBtn.disabled = false;
+                    document.getElementById('developerUploadForm').reset();
+                    resetFileUploadArea();
+                    // Also reset new upload areas
+                    if (trailerFileInput) trailerFileInput.value = '';
+                    if (coverFileInput) coverFileInput.value = '';
+                    if (screenshotsFileInput) screenshotsFileInput.value = '';
+                    if (trailerProgress) trailerProgress.style.display = 'none';
+                    if (coverProgress) coverProgress.style.display = 'none';
+                    if (screenshotsProgress) screenshotsProgress.style.display = 'none';
+                    if (trailerStatus) trailerStatus.textContent = '';
+                    if (coverStatus) coverStatus.textContent = '';
+                    if (screenshotsStatus) screenshotsStatus.textContent = '';
+                }
+            });
+
+            // Form submission (unchanged, but now the URL fields are filled)
+            const uploadForm = document.getElementById('developerUploadForm');
+            uploadForm?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                submitBtn.disabled = true;
+
+                setTimeout(() => {
+                    alert('✅ Game submitted for review! You will receive an email confirmation.');
+                    this.reset();
+                    resetFileUploadArea();
+                    formContainer.style.display = 'none';
+                    dashboardGrid.style.display = 'grid';
+                    showUploadBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            });
+
+            // Preview button (unchanged)
+            document.getElementById('previewBtn')?.addEventListener('click', function() {
+                const title = document.getElementById('gameTitle')?.value;
+                const price = document.getElementById('gamePrice')?.value;
+                if (!title || !price) {
+                    alert('Please fill in title and price first');
+                    return;
+                }
+                alert(`Preview: "${title}" - MWK ${price}\n\n(This is a demo preview.)`);
+            });
+
+            // Auto-fill sample data for localhost (unchanged)
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                setTimeout(() => {
+                    if (document.getElementById('gameTitle') && !document.getElementById('gameTitle').value) {
+                        document.getElementById('gameTitle').value = 'African Adventure Quest';
+                        document.getElementById('gamePrice').value = '2500';
+                        document.getElementById('gameDescription').value = 'Explore the beautiful landscapes of Africa in this epic adventure game. Discover hidden treasures, solve ancient puzzles, and encounter wildlife.';
+                        document.getElementById('gameDeveloper').value = 'UG Artworks';
+                        // Note: cover and screenshots will be filled by file uploads, not by default URL
+                        document.getElementById('gameRequirements').value = 'Android 8.0+, 2GB RAM, 1GB storage';
+                        document.getElementById('b2FileKey').value = 'games/african-adventure.apk';
+                    }
+                }, 100);
+            }
+        }
+
+        // Back to Top (unchanged)
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTopBtn.classList.toggle('visible', window.pageYOffset > 300);
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            backToTopBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => backToTopBtn.style.transform = '', 200);
+        });
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', renderPublishContent);
+
+        // Re-render on auth changes
+        window.addEventListener('authStateChanged', renderPublishContent);
+    </script>
+</body>
+</html>

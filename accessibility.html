@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility - mvura</title>
+<link rel="icon" type="image/svg+xml" href="/mvurafavicon.svg">
+<link rel="icon" type="image/x-icon" href="/mvurafavicon.ico">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* ========== ACCESSIBILITY PAGE SPECIFIC STYLES ========== */
+        .main-content {
+            margin-top: 70px;
+            padding: 0;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .policy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .policy-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .policy-header p {
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+
+        .policy-section {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .policy-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 0.75rem;
+        }
+
+        .policy-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 1.5rem 0 1rem;
+        }
+
+        .policy-section p, .policy-section li {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .policy-section ul, .policy-section ol {
+            padding-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .policy-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .policy-section strong {
+            color: var(--accent);
+        }
+
+        .policy-section .highlight {
+            background: rgba(var(--accent-rgb), 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .policy-section .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .last-updated {
+            text-align: right;
+            font-style: italic;
+            color: var(--muted);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--line);
+        }
+
+        @media (max-width: 768px) {
+            .policy-header h1 {
+                font-size: 2.2rem;
+            }
+            .policy-section {
+                padding: 1.5rem;
+            }
+            .policy-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container" onclick="location.href='index.html'">
+                <div class="logo-emoji">💧</div>
+                <div class="logo-text">mvura</div>
+            </div>
+            <div class="header-page-title">ACCESSIBILITY</div>
+            <div class="menu-container">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Dropdown Menu -->
+    <nav class="dropdown-menu" id="dropdownMenu">
+        <button class="menu-close-btn" id="menuCloseBtn">✕</button>
+        <div class="menu-section">
+            <div class="menu-title">Navigation</div>
+            <a href="index.html" class="menu-link"><span class="menu-icon">🏠</span><span>Home</span></a>
+            <a href="store.html" class="menu-link"><span class="menu-icon">🎮</span><span>Games Store</span></a>
+            <a href="publish.html" class="menu-link" id="staticPublishLink"><span class="menu-icon">🚀</span><span>Publish Game</span></a>
+            <a href="news.html" class="menu-link"><span class="menu-icon">📰</span><span>News & Updates</span></a>
+            <a href="about.html" class="menu-link"><span class="menu-icon">👥</span><span>About Us</span></a>
+            <a href="contact.html" class="menu-link"><span class="menu-icon">☎️</span><span>Contact</span></a>
+        </div>
+        <div id="account-menu-container"></div>
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div style="padding: 0.75rem 1rem; color: var(--muted); font-size: 0.9rem;">
+                Switch between light and dark themes
+            </div>
+        </div>
+    </nav>
+
+    <!-- AUTH MODAL (updated with OTP signup) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-close" id="authCloseBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log in</button>
+                <button class="auth-tab" data-tab="signup">Create account</button>
+            </div>
+            
+            <!-- Login Form (unchanged) -->
+            <div id="loginForm" class="auth-form active">
+                <input type="tel" id="loginPhone" placeholder="Phone number" autocomplete="tel">
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <span class="toggle-eye" data-for="loginPassword">👁</span>
+                </div>
+                <button class="btn" id="modalLoginBtn">Log in</button>
+                <div class="forgot-link" id="forgotPasswordLink">Forgot password?</div>
+                <div class="demo-hint">Use your phone number and password</div>
+            </div>
+            
+            <!-- Signup Form with OTP -->
+            <div id="signupForm" class="auth-form">
+                <!-- Main signup form -->
+                <div id="signupMainForm">
+                    <input type="text" id="signupFirstName" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="signupLastName" placeholder="Last name" autocomplete="family-name">
+                    <input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="tel">
+                    <input type="email" id="signupEmail" placeholder="Email address (for recovery)" autocomplete="email">
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="signupPassword">👁</span>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="confirmPassword">👁</span>
+                    </div>
+                    <select id="signupRole">
+                        <option value="player" selected>🎮 Player</option>
+                        <option value="developer">🛠️ Developer</option>
+                    </select>
+                    <!-- Terms agreement checkbox -->
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; accent-color: var(--accent); transform: scale(1.2);">
+                        <label for="agreeTerms" style="color: var(--text); font-size: 0.9rem;">
+                            I agree to the <a href="terms.html" target="_blank" style="color: var(--accent);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color: var(--accent);">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button class="btn" id="modalSignupBtn">Sign up</button>
+                    <div class="demo-hint">Password stored with simple hash (demo)</div>
+                </div>
+
+                <!-- OTP verification section (initially hidden) -->
+                <div id="otpSection" style="display: none;">
+                    <p id="otpMessage" style="color: var(--text); margin-bottom: 1rem;"></p>
+                    <input type="text" id="otpCode" placeholder="6‑digit code" maxlength="6" pattern="\d{6}" style="margin-bottom: 1rem;">
+                    <button class="btn" id="verifyOtpBtn">Verify Code</button>
+                    <button class="btn btn-outline" id="cancelOtpBtn" style="margin-top: 0.5rem;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form (unchanged) -->
+            <div id="forgotPasswordForm" class="auth-form">
+                <h3 style="margin-bottom: 1.5rem;">Reset password</h3>
+                <input type="tel" id="resetPhone" placeholder="Phone number" autocomplete="tel">
+                <input type="email" id="resetEmail" placeholder="Email address (for verification)" autocomplete="email">
+                <button class="btn" id="sendResetCodeBtn">Send reset code</button>
+                
+                <div id="resetCodeSection" style="display: none;">
+                    <div style="margin: 1.5rem 0;"></div>
+                    <input type="text" id="resetCode" placeholder="6‑digit code">
+                    <div class="password-wrapper">
+                        <input type="password" id="resetNewPassword" placeholder="New password">
+                        <span class="toggle-eye" data-for="resetNewPassword">👁</span>
+                    </div>
+                    <button class="btn" id="confirmResetBtn">Reset password</button>
+                    <div class="demo-hint">🔎 Code will appear in console (demo)</div>
+                </div>
+                
+                <div class="back-to-login" id="backToLoginBtn">← Back to login</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-container">
+            <div class="policy-header">
+                <h1>Accessibility</h1>
+                <p>Last updated: 28 February 2026</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Our Commitment</h2>
+                <p>mvura is committed to ensuring digital accessibility for people with disabilities. We are continually improving the user experience for everyone and applying the relevant accessibility standards. Our goal is to make mvura.games accessible to the widest possible audience, regardless of technology or ability.</p>
+                <p>We believe that everyone should be able to enjoy games and connect with creators, and we strive to provide an inclusive environment for all our users.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Conformance Status</h2>
+                <p>The <strong>Web Content Accessibility Guidelines (WCAG)</strong> define requirements for designers and developers to improve accessibility for people with disabilities. It defines three levels of conformance: Level A, Level AA, and Level AAA.</p>
+                <p>mvura aims to conform to <strong>WCAG 2.1 Level AA</strong>. These guidelines are internationally recognised and form the basis of accessibility regulations in many countries, including Malawi's emerging digital standards. We regularly test our website with automated tools and manual audits to identify and fix accessibility issues.</p>
+                <div class="highlight">
+                    <p><span class="badge">WCAG 2.1 AA</span> We are actively working to meet these standards.</p>
+                </div>
+            </div>
+
+            <div class="policy-section">
+                <h2>Accessibility Features</h2>
+                <p>We have implemented the following features to improve accessibility:</p>
+                <ul>
+                    <li><strong>Semantic HTML:</strong> We use proper heading structures, landmark regions, and semantic elements to ensure screen readers can navigate the site effectively.</li>
+                    <li><strong>Keyboard Navigation:</strong> All interactive elements (buttons, links, forms) are focusable and operable via keyboard. You can navigate using the Tab key, and activate elements with Enter or Space.</li>
+                    <li><strong>Skip Links:</strong> A "Skip to main content" link is available (visually hidden until focused) to allow keyboard users to bypass repetitive navigation.</li>
+                    <li><strong>Colour Contrast:</strong> We maintain sufficient colour contrast between text and background, meeting WCAG AA requirements. Our light and dark themes are both tested for contrast.</li>
+                    <li><strong>Text Resizing:</strong> The site uses relative units (rem) so that text can be resized up to 200% without loss of content or functionality. You can use browser zoom or text‑only zoom.</li>
+                    <li><strong>ARIA Attributes:</strong> We use ARIA landmarks and labels where necessary to enhance screen reader comprehension (e.g., for modal dialogs, dropdown menus).</li>
+                    <li><strong>Focus Indicators:</strong> All interactive elements have visible focus indicators (usually a coloured outline) to help keyboard users track their position.</li>
+                    <li><strong>Alternative Text:</strong> Images that convey information have descriptive alt text. Decorative images are marked with empty alt attributes.</li>
+                    <li><strong>Forms and Errors:</strong> Form inputs have associated labels, and validation errors are described clearly to assist users of assistive technology.</li>
+                    <li><strong>Dark Theme:</strong> A dark theme is available for users who prefer reduced brightness or have light sensitivity. The theme toggle is persistent across pages.</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h2>Limitations and Known Issues</h2>
+                <p>Despite our best efforts, some parts of the website may not be fully accessible. We are aware of the following issues and are working to resolve them:</p>
+                <ul>
+                    <li><strong>Third‑Party Content:</strong> Some games and content uploaded by developers may not be fully accessible. We encourage developers to follow accessibility best practices and provide guidance in our developer documentation.</li>
+                    <li><strong>Older PDFs:</strong> Some older documents (e.g., archived reports) may not be fully accessible. Please contact us if you need an alternative format.</li>
+                    <li><strong>Video Content:</strong> Some videos may lack captions or audio descriptions. We are working with content creators to improve this.</li>
+                </ul>
+                <p>If you encounter any accessibility barriers, please report them using the contact information below.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Feedback and Support</h2>
+                <p>We welcome your feedback on the accessibility of mvura. If you encounter accessibility issues or have suggestions for improvement, please let us know:</p>
+                <ul>
+                    <li><strong>Email:</strong> <a href="mailto:accessibility@mvura.games" style="color: var(--accent);">accessibility@mvura.games</a></li>
+                    <li><strong>Phone:</strong> +265 (0) [to be inserted] (please leave a message and we will return your call)</li>
+                    <li><strong>Contact Form:</strong> Visit our <a href="contact.html" style="color: var(--accent);">Contact page</a> and select "Accessibility Issue" as the subject.</li>
+                </ul>
+                <p>We aim to respond to accessibility feedback within 5 business days and will work with you to provide the information or service you need through an accessible alternative.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Technical Specifications</h2>
+                <p>mvura relies on the following technologies to work with the particular combination of web browser and any assistive technologies or plugins installed on your device:</p>
+                <ul>
+                    <li>HTML5</li>
+                    <li>CSS3 (including Flexbox and Grid for layout)</li>
+                    <li>JavaScript (enhancements, not required for basic navigation)</li>
+                    <li>WAI‑ARIA for dynamic content</li>
+                </ul>
+                <p>These technologies are relied upon for conformance with the accessibility standards used.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Assessment Methods</h2>
+                <p>mvura assesses its accessibility through:</p>
+                <ul>
+                    <li><strong>Automated testing:</strong> We use tools like axe, Lighthouse, and WAVE to scan our pages for common issues.</li>
+                    <li><strong>Manual testing:</strong> We perform keyboard‑only navigation and screen reader testing (using NVDA and VoiceOver).</li>
+                    <li><strong>User feedback:</strong> We listen to reports from users with disabilities and prioritise fixes.</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h2>Accessibility for Developers</h2>
+                <p>If you are a developer publishing games on mvura, we encourage you to make your games accessible. Consider:</p>
+                <ul>
+                    <li>Providing subtitles/captions for any video or audio content.</li>
+                    <li>Ensuring colour contrast meets WCAG standards.</li>
+                    <li>Making your game fully playable with keyboard or alternative input methods.</li>
+                    <li>Including options for text size adjustment and high‑contrast modes.</li>
+                    <li>Testing with screen readers if your game includes text.</li>
+                </ul>
+                <p>For more detailed guidance, please refer to our <a href="publish.html" style="color: var(--accent);">developer documentation</a> or contact us at <a href="mailto:developers@mvura.games" style="color: var(--accent);">developers@mvura.games</a>.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Ongoing Efforts</h2>
+                <p>Accessibility is an ongoing process. We regularly review our website and make improvements. Some of the initiatives we are currently working on include:</p>
+                <ul>
+                    <li>Adding captions to all promotional videos.</li>
+                    <li>Improving keyboard navigation for the game carousels.</li>
+                    <li>Providing more descriptive labels for complex interactive components.</li>
+                    <li>Creating an accessibility statement in local languages (Chichewa, etc.).</li>
+                </ul>
+                <p>We are committed to making mvura a more inclusive platform for everyone.</p>
+            </div>
+
+            <div class="last-updated">
+                This Accessibility statement was last updated on 28 February 2026.
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <nav class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="cookies.html" class="footer-link">Cookie Policy</a>
+                <a href="dmca.html" class="footer-link">DMCA</a>
+                <a href="faq.html" class="footer-link">FAQ</a>
+                <a href="accessibility.html" class="footer-link">Accessibility</a>
+            </nav>
+            
+            <p class="footer-info">
+                For game submissions or support: <a href="mailto:ugartworks.comp@gmail.com" class="footer-email">ugartworks.comp@gmail.com</a>
+            </p>
+            
+            <div class="footer-copyright">
+                © 2026 mvura Game Platform. All rights reserved. UG ARTWORKS | Designed by James Mlelemba
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><span>↑</span></button>
+
+    <!-- External Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+</body>
+</html>

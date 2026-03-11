@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - mvura</title>
+<link rel="icon" type="image/svg+xml" href="/mvurafavicon.svg">
+<link rel="icon" type="image/x-icon" href="/mvurafavicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* ========== CONTACT PAGE SPECIFIC STYLES ========== */
+        :root {
+            --whatsapp: #25D366;
+            --facebook: #1877F2;
+            --youtube: #FF0000;
+        }
+        body.dark {
+            --whatsapp: #25D366;
+            --facebook: #1877F2;
+            --youtube: #FF0000;
+        }
+
+        .main-content {
+            margin-top: 70px;
+            padding: 0;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .contact-hero {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            max-height: 500px;
+            margin-top: 70px;
+            overflow: hidden;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80&blur=20');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(47, 111, 95, 0.9) 0%,
+                rgba(42, 65, 88, 0.85) 50%,
+                rgba(31, 41, 55, 0.8) 100%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-text {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            padding-left: 3rem;
+            border-left: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .contact-main {
+            padding: 5rem 0;
+            background: var(--bg);
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-header p {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .contact-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .contact-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .contact-card p {
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .contact-method {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .contact-method:last-child {
+            border-bottom: none;
+        }
+
+        .method-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .method-value {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s ease;
+        }
+
+        .method-value:hover {
+            opacity: 0.8;
+        }
+
+        .method-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .method-action:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(47, 111, 95, 0.3);
+        }
+
+        .whatsapp-card .card-icon {
+            color: var(--whatsapp);
+        }
+
+        .facebook-card .card-icon {
+            color: var(--facebook);
+        }
+
+        .youtube-card .card-icon {
+            color: var(--youtube);
+        }
+
+        .social-media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .social-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .social-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .whatsapp-card .social-icon {
+            background: var(--whatsapp);
+        }
+
+        .facebook-card .social-icon {
+            background: var(--facebook);
+        }
+
+        .youtube-card .social-icon {
+            background: var(--youtube);
+        }
+
+        .social-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .social-card p {
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .social-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .whatsapp-card .social-action {
+            background: var(--whatsapp);
+        }
+
+        .facebook-card .social-action {
+            background: var(--facebook);
+        }
+
+        .youtube-card .social-action {
+            background: var(--youtube);
+        }
+
+        .social-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-form-container {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 4rem;
+        }
+
+        .contact-form-container h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--text);
+            text-align: center;
+        }
+
+        .contact-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            padding: 1rem;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(47, 111, 95, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            grid-column: span 2;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(47, 111, 95, 0.3);
+        }
+
+        .team-section {
+            margin-top: 6rem;
+            padding-top: 4rem;
+            border-top: 1px solid var(--line);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .team-member h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .member-role {
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .member-email {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .member-email:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .header-page-title {
+                display: none;
+            }
+            .contact-hero {
+                margin-top: 60px;
+            }
+            .hero-content {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding: 0 1.5rem;
+            }
+            .hero-text {
+                max-width: 100%;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-stats {
+                flex-direction: column;
+                border-left: none;
+                border-top: 2px solid rgba(255, 255, 255, 0.3);
+                padding-left: 0;
+                padding-top: 2rem;
+                gap: 2rem;
+                margin-top: 2rem;
+                width: 100%;
+            }
+            .contact-container {
+                padding: 0 1rem;
+            }
+            .contact-grid,
+            .social-media-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .contact-card,
+            .social-card {
+                padding: 2rem;
+            }
+            .contact-form-container {
+                padding: 2rem;
+            }
+            .contact-form {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            .submit-btn {
+                grid-column: span 1;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            .stat-number {
+                font-size: 1.5rem;
+            }
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            .contact-card,
+            .social-card {
+                padding: 1.5rem;
+            }
+            .card-icon {
+                font-size: 2rem;
+            }
+            .contact-card h3,
+            .social-card h3 {
+                font-size: 1.3rem;
+            }
+            .social-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo-emoji">💧</div>
+                <div class="logo-text">mvura</div>
+            </div>
+            <div class="header-page-title">CONTACT</div>
+            <div class="menu-container">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Dropdown Menu -->
+    <nav class="dropdown-menu" id="dropdownMenu">
+        <button class="menu-close-btn" id="menuCloseBtn">✕</button>
+        <div class="menu-section">
+            <div class="menu-title">Navigation</div>
+            <a href="index.html" class="menu-link"><span class="menu-icon">🏠</span><span>Home</span></a>
+            <a href="store.html" class="menu-link"><span class="menu-icon">🎮</span><span>Games Store</span></a>
+            <a href="publish.html" class="menu-link" id="staticPublishLink"><span class="menu-icon">🚀</span><span>Publish Game</span></a>
+            <a href="news.html" class="menu-link"><span class="menu-icon">📰</span><span>News & Updates</span></a>
+            <a href="about.html" class="menu-link"><span class="menu-icon">👥</span><span>About Us</span></a>
+            <a href="contact.html" class="menu-link active"><span class="menu-icon">☎️</span><span>Contact</span></a>
+        </div>
+        <div id="account-menu-container"></div>
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div style="padding: 0.75rem 1rem; color: var(--muted); font-size: 0.9rem;">
+                Switch between light and dark themes
+            </div>
+        </div>
+    </nav>
+
+    <!-- AUTH MODAL (updated with OTP) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-close" id="authCloseBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log in</button>
+                <button class="auth-tab" data-tab="signup">Create account</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <input type="tel" id="loginPhone" placeholder="Phone number" autocomplete="tel">
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <span class="toggle-eye" data-for="loginPassword">👁</span>
+                </div>
+                <button class="btn" id="modalLoginBtn">Log in</button>
+                <div class="forgot-link" id="forgotPasswordLink">Forgot password?</div>
+                <div class="demo-hint">Use your phone number and password</div>
+            </div>
+            
+            <!-- Signup Form with OTP (two‑step) -->
+            <div id="signupForm" class="auth-form">
+                <!-- Main signup form -->
+                <div id="signupMainForm">
+                    <input type="text" id="signupFirstName" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="signupLastName" placeholder="Last name" autocomplete="family-name">
+                    <input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="tel">
+                    <input type="email" id="signupEmail" placeholder="Email address (for recovery)" autocomplete="email">
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="signupPassword">👁</span>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="confirmPassword">👁</span>
+                    </div>
+                    <select id="signupRole">
+                        <option value="player" selected>🎮 Player</option>
+                        <option value="developer">🛠️ Developer</option>
+                    </select>
+                    <!-- Terms agreement checkbox -->
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; accent-color: var(--accent); transform: scale(1.2);">
+                        <label for="agreeTerms" style="color: var(--text); font-size: 0.9rem;">
+                            I agree to the <a href="terms.html" target="_blank" style="color: var(--accent);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color: var(--accent);">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button class="btn" id="modalSignupBtn">Sign up</button>
+                    <div class="demo-hint">Password stored with simple hash (demo)</div>
+                </div>
+
+                <!-- OTP verification section (initially hidden) -->
+                <div id="otpSection" style="display: none;">
+                    <p id="otpMessage" style="color: var(--text); margin-bottom: 1rem;"></p>
+                    <input type="text" id="otpCode" placeholder="6‑digit code" maxlength="6" pattern="\d{6}" style="margin-bottom: 1rem;">
+                    <button class="btn" id="verifyOtpBtn">Verify Code</button>
+                    <button class="btn btn-outline" id="cancelOtpBtn" style="margin-top: 0.5rem;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form -->
+            <div id="forgotPasswordForm" class="auth-form">
+                <h3 style="margin-bottom: 1.5rem;">Reset password</h3>
+                <input type="tel" id="resetPhone" placeholder="Phone number" autocomplete="tel">
+                <input type="email" id="resetEmail" placeholder="Email address (for verification)" autocomplete="email">
+                <button class="btn" id="sendResetCodeBtn">Send reset code</button>
+                
+                <div id="resetCodeSection" style="display: none;">
+                    <div style="margin: 1.5rem 0;"></div>
+                    <input type="text" id="resetCode" placeholder="6‑digit code">
+                    <div class="password-wrapper">
+                        <input type="password" id="resetNewPassword" placeholder="New password">
+                        <span class="toggle-eye" data-for="resetNewPassword">👁</span>
+                    </div>
+                    <button class="btn" id="confirmResetBtn">Reset password</button>
+                    <div class="demo-hint">🔎 Code will appear in console (demo)</div>
+                </div>
+                
+                <div class="back-to-login" id="backToLoginBtn">← Back to login</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="contact-hero">
+        <div class="hero-background"></div>
+        <div class="hero-gradient"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Get in Touch</h1>
+                <p class="hero-subtitle">We're here to help you succeed on the mvura platform. Reach out anytime.</p>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number"><24h</div>
+                    <div class="stat-label">Response Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Satisfaction</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="contact-main">
+        <div class="contact-container">
+            <!-- Contact Grid -->
+            <section class="contact-section">
+                <div class="section-header">
+                    <h2>How Can We Help?</h2>
+                    <p>Choose the right channel for your inquiry. Our team is ready to assist you.</p>
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Support Card -->
+                    <div class="contact-card">
+                        <div class="card-icon">🛟</div>
+                        <h3>Technical Support</h3>
+                        <p>Get help with platform issues, bugs, account problems, and technical questions.</p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="method-label">📧 Support Email</div>
+                                <a href="mailto:support@mvura.games" class="method-value">support@mvura.games</a>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-label">🕐 Response Time</div>
+                                <div class="method-value">Usually within 24 hours</div>
+                            </div>
+                        </div>
+                        <a href="mailto:support@mvura.games" class="method-action">Email Support</a>
+                    </div>
+
+                    <!-- Developers Card -->
+                    <div class="contact-card">
+                        <div class="card-icon">🚀</div>
+                        <h3>Developer Program</h3>
+                        <p>Publish your games, join our developer community, and access API documentation.</p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="method-label">🤝 Developer Relations</div>
+                                <a href="mailto:developers@mvura.games" class="method-value">developers@mvura.games</a>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-label">📚 Documentation</div>
+                                <a href="/docs" class="method-value">View API Docs</a>
+                            </div>
+                        </div>
+                        <a href="/publish" class="method-action">Publish Your Game</a>
+                    </div>
+
+                    <!-- Community Card -->
+                    <div class="contact-card">
+                        <div class="card-icon">🌐</div>
+                        <h3>Join Community</h3>
+                        <p>Connect with thousands of developers and gamers in our vibrant community.</p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="method-label">🎮 Discord</div>
+                                <div class="method-value">5,000+ active members</div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-label">🐦 Twitter / X</div>
+                                <div class="method-value">Latest updates & announcements</div>
+                            </div>
+                        </div>
+                        <button class="method-action" onclick="openDiscord()">Join Discord</button>
+                    </div>
+
+                    <!-- Business Card -->
+                    <div class="contact-card">
+                        <div class="card-icon">💼</div>
+                        <h3>Business & Press</h3>
+                        <p>Partnership opportunities, media inquiries, and business development.</p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="method-label">🤝 Partnerships</div>
+                                <a href="mailto:partners@mvura.games" class="method-value">partners@mvura.games</a>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-label">📰 Press & Media</div>
+                                <a href="mailto:press@mvura.games" class="method-value">press@mvura.games</a>
+                            </div>
+                        </div>
+                        <a href="mailto:partners@mvura.games" class="method-action">Business Inquiry</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Social Media Grid -->
+            <section class="social-section">
+                <div class="section-header">
+                    <h2>Connect on Social Media</h2>
+                    <p>Follow us for updates, announcements, and direct messaging.</p>
+                </div>
+
+                <div class="social-media-grid">
+                    <!-- WhatsApp Card -->
+                    <div class="social-card whatsapp-card">
+                        <div class="social-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                <path d="M17.6 6.3C16 4.7 13.9 4 11.8 4c-4.4 0-8 3.6-8 8 0 1.4.4 2.8 1.1 4l-1.1 4 4-1.1c1.2.7 2.6 1.1 4 1.1 4.4 0 8-3.6 8-8 0-2.1-.7-4.1-2.2-5.7zM11.8 18c-1.3 0-2.6-.4-3.6-1l-.3-.2-2.6.7.7-2.5-.2-.3c-.7-1.1-1-2.4-1-3.7 0-3.3 2.7-6 6-6 1.6 0 3.1.6 4.2 1.8 1.1 1.1 1.8 2.6 1.8 4.2 0 3.3-2.7 6-6 6zm3.2-4.5c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.1-1.3-.5-2.5-1.6-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.7.2-.2.3-.3.5-.5.2-.2.3-.3.4-.5.1-.2.1-.4 0-.5-.1-.2-.7-1.7-1-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 1.8 2.8 4.4 3.9.6.3 1.1.5 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.5z"/>
+                            </svg>
+                        </div>
+                        <h3>WhatsApp</h3>
+                        <p>Chat with us directly on WhatsApp for quick responses and support.</p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="method-label">📱 Phone Number</div>
+                                <div class="method-value">0887742404</div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-label">🕐 Available Hours</div>
+                                <div class="method-value">Mon-Fri, 9AM-6PM</div>
+                            </div>
+                        </div>
+                        <a href="https://wa.me/265887742404" class="social-action" target="_blank">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style="margin-right: 8px;">
+                                <path d="M17.6 6.3C16 4.7 13.9 4 11.8 4c-4.4 0-8 3.6-8 8 0 1.4.4 2.8 1.1 4l-1.1 4 4-1.1c1.2.7 2.6 1.1 4 1.1 4.4 0 8-3.6 8-8 0-2.1-.7-4.1-2.2-5.7zM11.8 18c-1.3 0-2.6-.4-3.6-1l-.3-.2-2.6.7.7-2.5-.2-.3c-.7-1.1-1-2.4-1-3.7 0-3.3 2.7-6 6-6 1.6 0 3.1.6 4.2 1.8 1.1 1.1 1.8 2.6 1.8 4.2 0 3.3-2.7 6-6 6zm3.2-4.5c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.1-1.3-.5-2.5-1.6-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.7.2-.2.3-.3.5-.5.2-.2.3-.3.4-.5.1-.2.1-.4 0-.5-.1-.2-.7-1.7-1-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 1.8 2.8 4.4 3.9.6.3 1.1.5 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.5z"/>
+                            </svg>
+                            Message on WhatsApp
+                        </a>
+                    </div>
+
+                    <!-- Facebook Card -->
+                    <div class="social-card facebook-card">
+                        <div class="social-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </div>
+                        <h3>Facebook Page</h3>
+                        <p>Follow our Facebook page for updates, news, and community discussions.</p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="method-label">📘 Page Type</div>
+                                <div class="method-value">Official Business Page</div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-label">📅 Updates</div>
+                                <div class="method-value">Regular posts & announcements</div>
+                            </div>
+                        </div>
+                        <a href="https://facebook.com/ugartworks" class="social-action" target="_blank">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style="margin-right: 8px;">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            Visit Facebook Page
+                        </a>
+                    </div>
+
+                    <!-- YouTube Card -->
+                    <div class="social-card youtube-card">
+                        <div class="social-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </div>
+                        <h3>YouTube Channel</h3>
+                        <p>Subscribe to our YouTube channel for tutorials, game demos, and updates.</p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="method-label">▶️ Channel</div>
+                                <div class="method-value">UG Artworks</div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="method-label">📧 Email/Channel</div>
+                                <a href="mailto:ugartworks.comp@gmail.com" class="method-value">ugartworks.comp@gmail.com</a>
+                            </div>
+                        </div>
+                        <a href="https://youtube.com/@ugartworks" class="social-action" target="_blank">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style="margin-right: 8px;">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                            Visit YouTube Channel
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Form -->
+            <section class="contact-form-section">
+                <div class="contact-form-container">
+                    <h3>Send Us a Message</h3>
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label class="form-label">Your Name</label>
+                            <input type="text" class="form-input" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Subject</label>
+                            <select class="form-select" required>
+                                <option value="" disabled selected>Select a subject</option>
+                                <option>Technical Support</option>
+                                <option>Game Publishing</option>
+                                <option>Partnership Inquiry</option>
+                                <option>Press & Media</option>
+                                <option>General Question</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Your Message</label>
+                            <textarea class="form-textarea" placeholder="How can we help you?" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Team Section -->
+            <section class="team-section">
+                <div class="section-header">
+                    <h2>Meet Our Team</h2>
+                    <p>Behind every great platform is an amazing team dedicated to your success.</p>
+                </div>
+                
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-avatar">J</div>
+                        <h4>James Mlelemba</h4>
+                        <div class="member-role">Lead Developer & Founder</div>
+                        <a href="mailto:mlelembajames018@gmail.com" class="member-email">mlelembajames018@gmail.com</a>
+                    </div>                                         
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <nav class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="cookies.html" class="footer-link">Cookie Policy</a>
+                <a href="dmca.html" class="footer-link">DMCA</a>
+                <a href="faq.html" class="footer-link">FAQ</a>
+                <a href="accessibility.html" class="footer-link">Accessibility</a>
+            </nav>
+            
+            <p class="footer-info">
+                For game submissions or support: <a href="mailto:ugartworks.comp@gmail.com" class="footer-email">ugartworks.comp@gmail.com</a>
+            </p>
+            
+            <div class="footer-copyright">
+                © 2026 mvura Game Platform. All rights reserved. UG ARTWORKS | Designed by James Mlelemba
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <span>↑</span>
+    </button>
+
+    <!-- External Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+
+    <!-- Page‑Specific Script -->
+    <script>
+        // ========== SETUP CSS VARIABLES ==========
+        function getCssVarRGB(variable) {
+            const color = getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+            if (color.startsWith('#')) {
+                const hex = color.replace('#', '');
+                const r = parseInt(hex.substr(0,2), 16);
+                const g = parseInt(hex.substr(2,2), 16);
+                const b = parseInt(hex.substr(4,2), 16);
+                return [r, g, b];
+            }
+            return [111, 194, 162];
+        }
+
+        document.documentElement.style.setProperty(
+            '--accent-rgb', 
+            getCssVarRGB('--accent').join(', ')
+        );
+
+        // ========== CONTACT FORM HANDLING ==========
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitBtn = this.querySelector('.submit-btn');
+                const originalText = submitBtn.textContent;
+                
+                // Show loading state
+                submitBtn.innerHTML = `
+                    <span style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="animation: spin 1s linear infinite;">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-dasharray="31.4 31.4" stroke-dashoffset="0"/>
+                        </svg>
+                        Sending...
+                    </span>
+                `;
+                
+                submitBtn.disabled = true;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // Show success state
+                    submitBtn.innerHTML = `
+                        <span style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Message Sent!
+                        </span>
+                    `;
+                    
+                    // Reset form
+                    setTimeout(() => {
+                        contactForm.reset();
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }, 2000);
+                }, 1500);
+            });
+        }
+
+        // Add spin animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ========== SOCIAL MEDIA FUNCTIONS ==========
+        function openDiscord() {
+            alert('Discord invite link would open here');
+        }
+
+        // WhatsApp click handler
+        document.querySelectorAll('.whatsapp-card .social-action').forEach(button => {
+            button.addEventListener('click', function(e) {
+                console.log('Opening WhatsApp...');
+            });
+        });
+
+        // Facebook click handler
+        document.querySelectorAll('.facebook-card .social-action').forEach(button => {
+            button.addEventListener('click', function(e) {
+                console.log('Opening Facebook...');
+            });
+        });
+
+        // YouTube click handler
+        document.querySelectorAll('.youtube-card .social-action').forEach(button => {
+            button.addEventListener('click', function(e) {
+                console.log('Opening YouTube...');
+            });
+        });
+
+        // ========== BACK TO TOP ==========
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            backToTopBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                backToTopBtn.style.transform = '';
+            }, 200);
+        });
+
+        // ========== CARD HOVER EFFECTS ==========
+        document.querySelectorAll('.contact-card, .social-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // ========== INITIALIZE ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add reveal animations
+            const revealElements = document.querySelectorAll('.section-header, .contact-card, .social-card, .contact-form-container, .team-member');
+            revealElements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+        });
+    </script>
+</body>
+</html>

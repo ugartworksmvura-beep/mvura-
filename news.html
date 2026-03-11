@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Updates - mvura</title>
+    <link rel="icon" type="image/svg+xml" href="/mvurafavicon.svg">
+    <link rel="icon" type="image/x-icon" href="/mvurafavicon.ico">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* ========== NEWS PAGE SPECIFIC STYLES ========== */
+        .main-content {
+            margin-top: 70px;
+            padding: 0;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .full-width-section {
+            width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 3rem 0 2rem;
+        }
+
+        .section-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #4a9c8a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .news-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+        }
+
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-dropdown-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 0.95rem;
+            cursor: pointer;
+            min-width: 150px;
+            transition: all 0.2s ease;
+        }
+
+        .filter-dropdown-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .filter-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            min-width: 180px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1000;
+        }
+
+        .filter-dropdown-menu.show {
+            display: block;
+        }
+
+        .filter-item {
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            color: var(--text);
+        }
+
+        .filter-item:hover {
+            background: rgba(var(--accent-rgb), 0.1);
+        }
+
+        .news-grid-container {
+            width: 100%;
+            max-width: 100vw;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1.5rem;
+            margin: 0;
+        }
+
+        .news-grid-item {
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .news-grid-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .news-grid-image {
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-grid-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .news-grid-item:hover .news-grid-image img {
+            transform: scale(1.05);
+        }
+
+        .news-grid-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .news-grid-content {
+            padding: 1.25rem;
+        }
+
+        .news-grid-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .news-grid-excerpt {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .news-grid-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .load-more-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 2rem auto;
+            min-width: 200px;
+            box-shadow: 0 4px 15px rgba(var(--accent-rgb), 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-3px);
+            background: var(--accent-light);
+            box-shadow: 0 8px 25px rgba(var(--accent-rgb), 0.3);
+        }
+
+        .load-more-btn:active {
+            transform: translateY(0);
+        }
+
+        .load-more-btn:disabled {
+            background: var(--muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .load-more-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .load-more-btn:hover::before {
+            left: 100%;
+        }
+
+        .back-to-news-btn {
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--text);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .back-to-news-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .article-view {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .article-header {
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .article-category {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text);
+            text-align: center;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+
+        .article-meta {
+            color: var(--muted);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .article-hero {
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .article-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text);
+            width: 100%;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 0;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            body, html {
+                overflow-x: hidden;
+                max-width: 100%;
+            }
+            
+            .main-header {
+                padding: 0.75rem 1rem;
+                height: 60px;
+            }
+            
+            .logo-text {
+                font-size: 1.3rem;
+            }
+            
+            .header-page-title {
+                font-size: 0.95rem;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                white-space: nowrap;
+                max-width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .dropdown-menu {
+                width: 280px;
+                padding-top: 4.5rem;
+            }
+            
+            .main-content {
+                margin-top: 60px;
+                min-height: calc(100vh - 120px);
+                overflow-x: hidden;
+            }
+            
+            .section-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .news-controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+                padding: 0 1rem;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .search-container {
+                min-width: 100%;
+                width: 100%;
+            }
+            
+            .search-input {
+                width: 100%;
+                padding: 0.75rem 1rem 0.75rem 2.5rem;
+                font-size: 0.9rem;
+                border-radius: 10px;
+            }
+            
+            .filter-dropdown {
+                width: 100%;
+            }
+            
+            .filter-dropdown-btn {
+                width: 100%;
+                justify-content: space-between;
+                padding: 0.75rem 1rem;
+                min-width: 100%;
+                border-radius: 10px;
+            }
+            
+            .filter-dropdown-menu {
+                width: 100%;
+                right: 0;
+                left: 0;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 0 1rem;
+                width: 100%;
+                box-sizing: border-box;
+                margin: 0;
+            }
+            
+            .article-container {
+                padding: 0 1rem;
+                width: 100%;
+            }
+            
+            .article-title {
+                font-size: 1.8rem;
+                text-align: center;
+                line-height: 1.3;
+            }
+            
+            .article-meta {
+                justify-content: center;
+                flex-wrap: wrap;
+                text-align: center;
+            }
+            
+            .article-hero {
+                height: 250px;
+                border-radius: 16px;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+            
+            .menu-close-btn {
+                top: 1rem;
+                right: 1rem;
+                width: 2.25rem;
+                height: 2.25rem;
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-page-title {
+                display: none;
+            }
+            
+            .section-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .news-controls {
+                padding: 0 0.75rem;
+            }
+            
+            .search-input {
+                padding: 0.65rem 0.875rem 0.65rem 2.25rem;
+                font-size: 0.85rem;
+            }
+            
+            .news-grid {
+                padding: 0 0.75rem;
+            }
+            
+            .article-container {
+                padding: 0 0.75rem;
+            }
+            
+            .article-title {
+                font-size: 1.5rem;
+                line-height: 1.3;
+            }
+            
+            .article-hero {
+                height: 200px;
+                border-radius: 12px;
+            }
+            
+            .article-content {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+            
+            .article-meta {
+                font-size: 0.85rem;
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo-emoji">💧</div>
+                <div class="logo-text">mvura</div>
+            </div>
+            <div class="header-page-title">NEWS & UPDATES</div>
+            <div class="menu-container">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Dropdown Menu -->
+    <nav class="dropdown-menu" id="dropdownMenu">
+        <button class="menu-close-btn" id="menuCloseBtn">✕</button>
+        <div class="menu-section">
+            <div class="menu-title">Navigation</div>
+            <a href="index.html" class="menu-link"><span class="menu-icon">🏠</span><span>Home</span></a>
+            <a href="store.html" class="menu-link"><span class="menu-icon">🎮</span><span>Games Store</span></a>
+            <a href="publish.html" class="menu-link" id="staticPublishLink"><span class="menu-icon">🚀</span><span>Publish Game</span></a>
+            <a href="news.html" class="menu-link active"><span class="menu-icon">📰</span><span>News & Updates</span></a>
+            <a href="about.html" class="menu-link"><span class="menu-icon">👥</span><span>About Us</span></a>
+            <a href="contact.html" class="menu-link"><span class="menu-icon">☎️</span><span>Contact</span></a>
+        </div>
+        <div id="account-menu-container"></div>
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div style="padding: 0.75rem 1rem; color: var(--muted); font-size: 0.9rem;">
+                Switch between light and dark themes
+            </div>
+        </div>
+    </nav>
+
+    <!-- AUTH MODAL (updated with OTP signup) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-close" id="authCloseBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log in</button>
+                <button class="auth-tab" data-tab="signup">Create account</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <input type="tel" id="loginPhone" placeholder="Phone number" autocomplete="tel">
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <span class="toggle-eye" data-for="loginPassword">👁</span>
+                </div>
+                <button class="btn" id="modalLoginBtn">Log in</button>
+                <div class="forgot-link" id="forgotPasswordLink">Forgot password?</div>
+                <div class="demo-hint">Use your phone number and password</div>
+            </div>
+            
+            <!-- Signup Form with OTP (two steps) -->
+            <div id="signupForm" class="auth-form">
+                <!-- Main signup form -->
+                <div id="signupMainForm">
+                    <input type="text" id="signupFirstName" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="signupLastName" placeholder="Last name" autocomplete="family-name">
+                    <input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="tel">
+                    <input type="email" id="signupEmail" placeholder="Email address (for recovery)" autocomplete="email">
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="signupPassword">👁</span>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="confirmPassword">👁</span>
+                    </div>
+                    <select id="signupRole">
+                        <option value="player" selected>🎮 Player</option>
+                        <option value="developer">🛠️ Developer</option>
+                    </select>
+                    <!-- Terms agreement checkbox -->
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; accent-color: var(--accent); transform: scale(1.2);">
+                        <label for="agreeTerms" style="color: var(--text); font-size: 0.9rem;">
+                            I agree to the <a href="terms.html" target="_blank" style="color: var(--accent);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color: var(--accent);">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button class="btn" id="modalSignupBtn">Sign up</button>
+                    <div class="demo-hint">Password stored with simple hash (demo)</div>
+                </div>
+
+                <!-- OTP verification section (initially hidden) -->
+                <div id="otpSection" style="display: none;">
+                    <p id="otpMessage" style="color: var(--text); margin-bottom: 1rem;"></p>
+                    <input type="text" id="otpCode" placeholder="6‑digit code" maxlength="6" pattern="\d{6}" style="margin-bottom: 1rem;">
+                    <button class="btn" id="verifyOtpBtn">Verify Code</button>
+                    <button class="btn btn-outline" id="cancelOtpBtn" style="margin-top: 0.5rem;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form -->
+            <div id="forgotPasswordForm" class="auth-form">
+                <h3 style="margin-bottom: 1.5rem;">Reset password</h3>
+                <input type="tel" id="resetPhone" placeholder="Phone number" autocomplete="tel">
+                <input type="email" id="resetEmail" placeholder="Email address (for verification)" autocomplete="email">
+                <button class="btn" id="sendResetCodeBtn">Send reset code</button>
+                
+                <div id="resetCodeSection" style="display: none;">
+                    <div style="margin: 1.5rem 0;"></div>
+                    <input type="text" id="resetCode" placeholder="6‑digit code">
+                    <div class="password-wrapper">
+                        <input type="password" id="resetNewPassword" placeholder="New password">
+                        <span class="toggle-eye" data-for="resetNewPassword">👁</span>
+                    </div>
+                    <button class="btn" id="confirmResetBtn">Reset password</button>
+                    <div class="demo-hint">🔎 Code will appear in console (demo)</div>
+                </div>
+                
+                <div class="back-to-login" id="backToLoginBtn">← Back to login</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Content Area -->
+        <div id="contentArea">
+            <!-- News listing will be loaded here by default -->
+            <div class="full-width-section">
+                <div class="page-container">
+                    <div class="section-header">
+                        <h1>News & Updates</h1>
+                        <p class="section-subtitle">All the latest from mvura platform and game releases</p>
+                    </div>
+                </div>
+                
+                <!-- SEARCH AND FILTER BAR -->
+                <div class="page-container">
+                    <div class="news-controls">
+                        <div class="search-container">
+                            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" class="search-input" placeholder="Search news by title..." id="newsSearch">
+                        </div>
+                        
+                        <div class="filter-dropdown">
+                            <button class="filter-dropdown-btn" id="newsFilterBtn">
+                                <span id="currentNewsFilter">Newest First</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </button>
+                            <div class="filter-dropdown-menu" id="newsFilterDropdown">
+                                <div class="filter-item" data-sort="newest">Newest First</div>
+                                <div class="filter-item" data-sort="oldest">Oldest First</div>
+                                <div class="filter-item" data-sort="az">A-Z (Title)</div>
+                                <div class="filter-item" data-sort="za">Z-A (Title)</div>
+                                <div class="filter-item" data-sort="category">By Category</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- NEWS GRID -->
+                <div id="newsGridContainer" class="news-grid-container">
+                    <!-- News grid will be loaded here -->
+                </div>
+                
+                <!-- LOAD MORE BUTTON -->
+                <div class="page-container" style="text-align: center; margin: 3rem auto;">
+                    <button id="loadMoreBtn" class="load-more-btn">
+                        Load More News
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <nav class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="cookies.html" class="footer-link">Cookie Policy</a>
+                <a href="dmca.html" class="footer-link">DMCA</a>
+                <a href="faq.html" class="footer-link">FAQ</a>
+                <a href="accessibility.html" class="footer-link">Accessibility</a>
+            </nav>
+            
+            <p class="footer-info">
+                For game submissions or support: <a href="mailto:ugartworks.comp@gmail.com" class="footer-email">ugartworks.comp@gmail.com</a>
+            </p>
+            
+            <div class="footer-copyright">
+                © 2026 mvura Game Platform. All rights reserved. UG ARTWORKS | Designed by James Mlelemba
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <span>↑</span>
+    </button>
+
+    <!-- External Scripts -->
+    <script src="js/news-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+
+    <!-- Page‑Specific Script -->
+    <script>
+        // ========== SETUP CSS VARIABLES ==========
+        function getCssVarRGB(variable) {
+            const color = getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+            if (color.startsWith('#')) {
+                const hex = color.replace('#', '');
+                const r = parseInt(hex.substr(0,2), 16);
+                const g = parseInt(hex.substr(2,2), 16);
+                const b = parseInt(hex.substr(4,2), 16);
+                return [r, g, b];
+            }
+            return [111, 194, 162];
+        }
+
+        document.documentElement.style.setProperty(
+            '--accent-rgb', 
+            getCssVarRGB('--accent').join(', ')
+        );
+
+        // ========== CHECK FOR ARTICLE IN URL ==========
+        function checkForArticleInURL() {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#article-')) {
+                const articleId = parseInt(hash.replace('#article-', ''));
+                if (!isNaN(articleId)) {
+                    showArticleView(articleId);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // ========== HANDLE BROWSER BACK/FORWARD ==========
+        window.addEventListener('popstate', function() {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#article-')) {
+                const articleId = parseInt(hash.replace('#article-', ''));
+                if (!isNaN(articleId)) {
+                    showArticleView(articleId);
+                }
+            } else {
+                showNewsGrid();
+            }
+        });
+
+        // ========== NEWS PAGINATION ==========
+        let currentNewsPage = 1;
+        const newsPerPage = 6;
+        let currentFilteredData = [...window.allNewsData];
+        let currentSort = 'newest';
+
+        // ========== RENDER NEWS GRID ==========
+        function renderNewsGrid(data = null, isInitial = true) {
+            const newsGridContainer = document.getElementById('newsGridContainer');
+            if (!newsGridContainer) return;
+            
+            const displayData = data || currentFilteredData;
+            
+            if (displayData.length === 0) {
+                newsGridContainer.innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--muted);">No news articles found matching your criteria.</div>';
+                const loadMoreBtn = document.getElementById('loadMoreBtn');
+                if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+                return;
+            }
+            
+            const endIndex = currentNewsPage * newsPerPage;
+            const itemsToShow = displayData.slice(0, endIndex);
+            
+            if (itemsToShow.length === 0) {
+                newsGridContainer.innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--muted);">No more articles to load.</div>';
+                const loadMoreBtn = document.getElementById('loadMoreBtn');
+                if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+                return;
+            }
+            
+            let html = '<div class="news-grid">';
+            
+            itemsToShow.forEach(article => {
+                html += `
+                    <div class="news-grid-item" data-id="${article.id}">
+                        <div class="news-grid-image">
+                            <img src="${article.imageUrl}" alt="${article.title}" loading="lazy">
+                            <div class="news-grid-badge">${article.category}</div>
+                        </div>
+                        <div class="news-grid-content">
+                            <h3 class="news-grid-title">${article.title}</h3>
+                            <p class="news-grid-excerpt">${article.excerpt}</p>
+                            <div class="news-grid-meta">
+                                <span>${article.date}</span>
+                                <span>${article.readTime}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            newsGridContainer.innerHTML = html;
+                       
+            document.querySelectorAll('.news-grid-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const articleId = parseInt(item.dataset.id);
+                    showArticleView(articleId);
+                    window.history.pushState(null, '', `#article-${articleId}`);
+                });
+            });
+            
+            updateLoadMoreButton(displayData.length);
+        }
+
+        // ========== SHOW ARTICLE VIEW ==========
+        function showArticleView(articleId) {
+            const article = window.allNewsData.find(a => a.id === articleId);
+            if (!article) return;
+            
+            const contentArea = document.getElementById('contentArea');
+            
+            contentArea.innerHTML = `
+                <div class="full-width-section">
+                    <div class="page-container">
+                        <button class="back-to-news-btn" id="backToNewsBtn">
+                            ← Back to News
+                        </button>
+                    </div>
+                    <div class="article-container">
+                        <article class="article-view">
+                            <header class="article-header">
+                                <div class="article-category">${article.category}</div>
+                                <h1 class="article-title">${article.title}</h1>
+                                <div class="article-meta">
+                                    <span>${article.date}</span>
+                                    <span>•</span>
+                                    <span>${article.readTime}</span>
+                                </div>
+                            </header>
+                            <div class="article-hero">
+                                <img src="${article.imageUrl}" alt="${article.title}" loading="lazy">
+                            </div>
+                            <div class="article-content">
+                                ${article.fullContent}
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('backToNewsBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                window.history.pushState(null, '', 'news.html');
+                showNewsGrid();
+            });
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ========== SHOW NEWS GRID ==========
+        function showNewsGrid() {
+            const contentArea = document.getElementById('contentArea');
+            
+            contentArea.innerHTML = `
+                <div class="full-width-section">
+                    <div class="page-container">
+                        <div class="section-header">
+                            <h1>News & Updates</h1>
+                            <p class="section-subtitle">All the latest from mvura platform and game releases</p>
+                        </div>
+                    </div>
+                    <div class="page-container">
+                        <div class="news-controls">
+                            <div class="search-container">
+                                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" class="search-input" placeholder="Search news by title..." id="newsSearch">
+                            </div>
+                            
+                            <div class="filter-dropdown">
+                                <button class="filter-dropdown-btn" id="newsFilterBtn">
+                                    <span id="currentNewsFilter">Newest First</span>
+                                    <span class="dropdown-arrow">▼</span>
+                                </button>
+                                <div class="filter-dropdown-menu" id="newsFilterDropdown">
+                                    <div class="filter-item" data-sort="newest">Newest First</div>
+                                    <div class="filter-item" data-sort="oldest">Oldest First</div>
+                                    <div class="filter-item" data-sort="az">A-Z (Title)</div>
+                                    <div class="filter-item" data-sort="za">Z-A (Title)</div>
+                                    <div class="filter-item" data-sort="category">By Category</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="newsGridContainer" class="news-grid-container">
+                        <!-- News grid will be loaded here -->
+                    </div>
+                    
+                    <div class="page-container" style="text-align: center; margin: 3rem auto;">
+                        <button id="loadMoreBtn" class="load-more-btn">
+                            Load More News
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            currentNewsPage = 1;
+            currentFilteredData = [...window.allNewsData];
+            sortNewsData(currentSort);
+            renderNewsGrid(currentFilteredData, true);
+            initNewsSearch();
+            initNewsFilter();
+            initLoadMore();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ========== INIT NEWS SEARCH ==========
+        function initNewsSearch() {
+            const searchInput = document.getElementById('newsSearch');
+            if (!searchInput) return;
+            
+            let searchTimeout;
+            
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const searchTerm = searchInput.value.toLowerCase().trim();
+                    
+                    currentNewsPage = 1;
+                    
+                    if (searchTerm === '') {
+                        currentFilteredData = [...window.allNewsData];
+                        sortNewsData(currentSort);
+                        renderNewsGrid(currentFilteredData, true);
+                        return;
+                    }
+                    
+                    currentFilteredData = window.allNewsData.filter(article => 
+                        article.title.toLowerCase().includes(searchTerm) ||
+                        article.excerpt.toLowerCase().includes(searchTerm) ||
+                        article.category.toLowerCase().includes(searchTerm) ||
+                        article.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                    );
+                    
+                    sortNewsData(currentSort);
+                    renderNewsGrid(currentFilteredData, true);
+                }, 300);
+            });
+        }
+
+        // ========== INIT NEWS FILTER ==========
+        function initNewsFilter() {
+            const filterBtn = document.getElementById('newsFilterBtn');
+            const filterDropdown = document.getElementById('newsFilterDropdown');
+            const currentFilterText = document.getElementById('currentNewsFilter');
+            
+            if (!filterBtn || !filterDropdown) return;
+            
+            filterBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                filterDropdown.classList.toggle('show');
+            });
+            
+            document.querySelectorAll('.filter-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const sortType = item.dataset.sort;
+                    currentSort = sortType;
+                    currentFilterText.textContent = item.textContent;
+                    
+                    currentNewsPage = 1;
+                    sortNewsData(sortType);
+                    renderNewsGrid(currentFilteredData, true);
+                    filterDropdown.classList.remove('show');
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!filterBtn.contains(e.target) && !filterDropdown.contains(e.target)) {
+                    filterDropdown.classList.remove('show');
+                }
+            });
+            
+            filterDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        // ========== SORT NEWS DATA ==========
+        function sortNewsData(sortType) {
+            switch(sortType) {
+                case 'newest':
+                    currentFilteredData.sort((a, b) => b.timestamp - a.timestamp);
+                    break;
+                case 'oldest':
+                    currentFilteredData.sort((a, b) => a.timestamp - b.timestamp);
+                    break;
+                case 'az':
+                    currentFilteredData.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                case 'za':
+                    currentFilteredData.sort((a, b) => b.title.localeCompare(a.title));
+                    break;
+                case 'category':
+                    currentFilteredData.sort((a, b) => a.category.localeCompare(b.category));
+                    break;
+            }
+        }
+
+        // ========== INIT LOAD MORE ==========
+        function initLoadMore() {
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (!loadMoreBtn) return;
+            
+            loadMoreBtn.addEventListener('click', () => {
+                currentNewsPage++;
+                renderNewsGrid();
+                
+                setTimeout(() => {
+                    loadMoreBtn.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'end' 
+                    });
+                }, 100);
+            });
+            
+            updateLoadMoreButton(currentFilteredData.length);
+        }
+
+        // ========== UPDATE LOAD MORE BUTTON ==========
+        function updateLoadMoreButton(totalItems) {
+            const button = document.getElementById('loadMoreBtn');
+            if (!button) return;
+            
+            const itemsLoaded = currentNewsPage * newsPerPage;
+            const remaining = totalItems - itemsLoaded;
+            
+            if (remaining > 0) {
+                button.style.display = 'flex';
+                button.disabled = false;
+                button.textContent = 'Load More News';
+            } else {
+                button.style.display = 'none';
+            }
+        }
+
+        // ========== BACK TO TOP ==========
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            backToTopBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                backToTopBtn.style.transform = '';
+            }, 200);
+        });
+
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            const isArticleView = checkForArticleInURL();
+            
+            if (!isArticleView) {
+                sortNewsData('newest');
+                renderNewsGrid();
+                initNewsSearch();
+                initNewsFilter();
+                initLoadMore();
+            }
+        });
+
+        // Match system theme changes
+        matchMedia("(prefers-color-scheme: dark)").addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {
+                document.body.classList.toggle('dark', e.matches);
+                themeToggle.textContent = e.matches ? '☀️' : '🌙';
+            }
+        });
+    </script>
+</body>
+</html>

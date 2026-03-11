@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect width="100%" height="100%" rx="12" ry="12" fill="#0D4F6C"/>
+
+  <!-- Droplet shape in realistic 💧 style -->
+  <path d="M32 2
+           C39 17, 53 38, 32 60
+           C11 38, 25 17, 32 2 Z"
+        fill="url(#dropletGradient)" stroke="#0288D1" stroke-width="1.2"/>
+
+  <!-- Droplet Gradient -->
+  <defs>
+    <linearGradient id="dropletGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4FC3F7"/>
+      <stop offset="70%" stop-color="#0288D1"/>
+      <stop offset="100%" stop-color="#0277BD"/>
+    </linearGradient>
+
+    <!-- Subtle highlight for realism -->
+    <radialGradient id="dropletHighlight" cx="0.35" cy="0.25" r="0.5">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Highlight overlay -->
+  <ellipse cx="32" cy="16" rx="9" ry="16" fill="url(#dropletHighlight)" />
+
+  <!-- Text on widest part of droplet -->
+  <text x="32" y="38" font-family="Poppins, Inter, Arial, sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">
+    mvura
+  </text>
+
+  <!-- Optional subtle shadow under droplet -->
+  <ellipse cx="32" cy="60" rx="16" ry="4" fill="#000" opacity="0.1"/>
+</svg>

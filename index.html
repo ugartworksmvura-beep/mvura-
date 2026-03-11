@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mvura · Game Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/mvurafavicon.svg">
+    <link rel="icon" type="image/x-icon" href="/mvurafavicon.ico">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* ========== HOME PAGE SPECIFIC STYLES ========== */
+        :root {
+            --carousel-radius: 20px;
+        }
+        body.dark {
+            --carousel-radius: 16px;
+        }
+
+        .main-content {
+            margin-top: 70px;
+            padding: 0;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - 140px);
+            width: 100%;
+        }
+
+        .hero {
+            position: relative;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 24px;
+            background: #000;
+            aspect-ratio: 16/9;
+            min-height: 500px;
+            border-bottom: 1px solid var(--line);
+            perspective: 1200px;
+        }
+        @media(max-width:640px) {
+            .hero { 
+                aspect-ratio: 4/5; 
+                min-height: 400px;
+                max-width: 95vw;
+                border-radius: 16px;
+            }
+        }
+        .hero-track {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hero-slide {
+            flex: 0 0 100%;
+            min-width: 100%;
+            position: relative;
+            transform: translateZ(-30px) scale(0.98);
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.9);
+            backface-visibility: hidden;
+            cursor: pointer;
+        }
+        .hero-slide.active {
+            transform: translateZ(0) scale(1);
+            filter: brightness(1.1);
+            z-index: 2;
+        }
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+        }
+        .hero-slide::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.15));
+        }
+        .hero-content {
+            position: absolute;
+            bottom: 15%;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            text-align: center;
+            padding: 0 20px 20px 20px;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+        .hero-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            margin: 0 auto;
+            max-width: 800px;
+            line-height: 1.2;
+        }
+        .counter-wrap {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 64px;
+            height: 64px;
+            z-index: 4;
+        }
+        .counter-number {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-weight: 600;
+            color: white;
+            font-size: 1rem;
+        }
+        .counter-ring {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        .counter-ring circle {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+        .counter-bg {
+            stroke: rgba(255,255,255,.15);
+        }
+        .counter-progress {
+            stroke: var(--accent);
+            stroke-dasharray: 188;
+            stroke-dashoffset: 188;
+            transition: stroke-dashoffset 0.05s linear;
+        }
+
+        .news-preview-section {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(180deg,transparent 0%,rgba(var(--accent-rgb), 0.03) 50%,transparent 100%);
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        .section-subtitle {
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        .section-divider {
+            height: 1px;
+            background: var(--line);
+            margin: 3rem 0;
+            width: 100%;
+        }
+        .news-list-container {
+            width: 100%;
+            max-width: 100vw;
+            overflow: hidden;
+            padding: 0;
+            margin: 2rem 0;
+        }
+        .news-preview-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 0 1.5rem;
+            margin: 0;
+            width: 100%;
+        }
+        .news-preview-item {
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            text-decoration: none;
+        }
+        .news-preview-item:hover {
+            transform: translateX(8px);
+            border-color: var(--accent);
+            background: rgba(var(--accent-rgb), 0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .news-icon {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-right: 1rem;
+            border: 2px solid var(--line);
+            position: relative;
+        }
+        .news-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .news-icon-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border: 2px solid var(--bg);
+        }
+        .news-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .news-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .news-category {
+            background: rgba(var(--accent-rgb), 0.1);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        .news-time {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        .see-more-btn {
+            display: flex;
+            width: fit-content;
+            margin: 2.5rem auto 0;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .see-more-btn:hover {
+            transform: translateY(-3px);
+            background: #4a9c8a;
+            box-shadow: 0 8px 25px rgba(var(--accent-rgb), 0.25);
+        }
+        .btn-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .see-more-btn:hover .btn-icon {
+            transform: translateX(5px);
+        }
+
+        .featured-games-section {
+            padding: 3rem 0;
+            background: linear-gradient(180deg,rgba(var(--accent-rgb), 0.02) 0%,transparent 100%);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+        .featured-carousel-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+        }
+        .featured-carousel {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            padding: 20px 0;
+            background: transparent;
+            overflow: hidden;
+            border-radius: var(--carousel-radius);
+        }
+        @media (min-width: 768px) {
+            .featured-carousel { height: 360px; }
+        }
+        @media (min-width: 1024px) {
+            .featured-carousel { height: 400px; }
+        }
+        .featured-track {
+            display: flex;
+            gap: 16px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            cursor: grab;
+            will-change: transform;
+            padding: 0 1.5rem;
+        }
+        .featured-track.dragging { cursor: grabbing; }
+        .game-card {
+            flex: 0 0 240px;
+            height: 260px;
+            margin: auto 0;
+            border-radius: var(--carousel-radius);
+            overflow: hidden;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,.15);
+            transform: scale(.92);
+            transition: transform .35s ease, box-shadow .35s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+        .game-card:hover { box-shadow: 0 18px 36px rgba(0,0,0,.25); }
+        .game-card.active {
+            transform: scale(1);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(var(--accent-rgb), 0.15);
+        }
+        @media (min-width: 768px) {
+            .game-card { flex: 0 0 280px; height: 300px; }
+        }
+        @media (min-width: 1024px) {
+            .game-card { flex: 0 0 320px; height: 340px; }
+        }
+        .game-slide {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform .2s ease;
+        }
+        .game-slide::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(255,255,255,0.1), rgba(0,0,0,0.75) 70%),
+                        linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.1) 40%, transparent 60%);
+        }
+        .game-slide a {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            display: block;
+        }
+        .game-content {
+            position: absolute;
+            inset: 0;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 8px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .game-label {
+            font-size: 11px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            opacity: .9;
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+        }
+        .game-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 4px 12px rgba(0,0,0,.9);
+            line-height: 1.2;
+        }
+        .game-badge {
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.2);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            width: fit-content;
+            color: white;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .carousel-btn {
+            pointer-events: all;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .carousel-btn:hover {
+            transform: scale(1.1);
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        @media (max-width: 768px) {
+            .carousel-btn { display: none; }
+        }
+
+        .discover-more-section {
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .discover-more-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #4a9c8a 100%);
+            color: white;
+            border: none;
+            padding: 1.25rem 3rem;
+            border-radius: 16px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(var(--accent-rgb), 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .discover-more-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.7s ease;
+        }
+        .discover-more-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(var(--accent-rgb), 0.4);
+            background: linear-gradient(135deg, #4a9c8a 0%, var(--accent) 100%);
+        }
+        .discover-more-btn:hover::before { left: 100%; }
+        .discover-icon {
+            font-size: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+        .discover-more-btn:hover .discover-icon {
+            transform: translateX(8px) rotate(5deg);
+        }
+
+        .signin-prompt {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.05) 0%, rgba(var(--accent-rgb), 0.02) 100%);
+        }
+        .signin-prompt.hidden {
+            display: none;
+        }
+        .signin-prompt-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .signin-prompt-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .signin-prompt h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        .signin-prompt p {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        .signin-btn-large {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .signin-btn-large:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(var(--accent-rgb), 0.25);
+        }
+        .signin-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .signin-btn-large:hover .signin-icon {
+            transform: translateX(3px);
+        }
+
+        .page-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .full-width-section {
+            width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        @media (max-width: 768px) {
+            body, html { overflow-x: hidden; max-width: 100%; }
+            .main-header { padding: 0.75rem 1rem; height: 60px; }
+            .logo-text { font-size: 1.3rem; }
+            .header-page-title { font-size: 0.95rem; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+            .dropdown-menu { width: 280px; padding-top: 4.5rem; }
+            .main-content { margin-top: 60px; min-height: calc(100vh - 120px); overflow-x: hidden; }
+            .news-preview-section { margin-top: 1.5rem; padding: 1rem 0; }
+            .news-preview-list { padding: 0; gap: 0; margin: 0; background: var(--bg); }
+            .news-preview-item { flex-direction: row; align-items: center; padding: 0.5rem 0.75rem; margin: 0; border-radius: 0; border: none; border-bottom: 1px solid var(--line); background: transparent; min-height: 60px; gap: 0.75rem; }
+            .news-icon { width: 40px; height: 40px; min-width: 40px; margin-right: 0; border-radius: 6px; }
+            .news-title { font-size: 0.85rem; line-height: 1.2; margin-bottom: 0.25rem; }
+            .news-meta { font-size: 0.7rem; gap: 0.5rem; }
+            .news-category { padding: 0.15rem 0.4rem; font-size: 0.65rem; }
+            .featured-carousel { height: 300px !important; padding: 10px 0; }
+            .game-card { flex: 0 0 200px !important; height: 240px !important; }
+            .game-title { font-size: 18px; }
+            .game-label { font-size: 10px; }
+            .game-badge { font-size: 10px; padding: 5px 10px; }
+            .discover-more-section { padding: 2.5rem 0; }
+            .discover-more-btn { padding: 1rem 2rem; font-size: 1.1rem; }
+            .signin-prompt { padding: 2rem 0; }
+            .signin-prompt h3 { font-size: 1.5rem; }
+            .signin-btn-large { padding: 0.875rem 2rem; font-size: 1rem; }
+            .menu-close-btn { top: 1rem; right: 1rem; width: 2.25rem; height: 2.25rem; font-size: 1.25rem; }
+        }
+        @media (max-width: 480px) {
+            .header-page-title { display: none; }
+            .hero { min-height: 380px !important; }
+            .hero-content { bottom: 25%; }
+            .hero-title { font-size: clamp(1.3rem,2vw,1.6rem); }
+            .counter-wrap { width: 45px; height: 45px; bottom: 15px; }
+            .discover-more-btn { width: 100%; max-width: 300px; padding: 0.875rem 1.5rem; font-size: 1rem; }
+            .signin-prompt h3 { font-size: 1.3rem; }
+            .signin-btn-large { width: 100%; max-width: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo-emoji">💧</div>
+                <div class="logo-text">mvura</div>
+            </div>
+            <div class="header-page-title">HOME</div>
+            <div class="menu-container">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Dropdown Menu -->
+    <nav class="dropdown-menu" id="dropdownMenu">
+        <button class="menu-close-btn" id="menuCloseBtn">✕</button>
+        <div class="menu-section">
+            <div class="menu-title">Navigation</div>
+            <a href="index.html" class="menu-link active">
+                <span class="menu-icon">🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="store.html" class="menu-link">
+                <span class="menu-icon">🎮</span>
+                <span>Games Store</span>
+            </a>
+            <a href="publish.html" class="menu-link" id="staticPublishLink">
+                <span class="menu-icon">🚀</span>
+                <span>Publish Game</span>
+            </a>
+            <a href="news.html" class="menu-link">
+                <span class="menu-icon">📰</span>
+                <span>News & Updates</span>
+            </a>
+            <a href="about.html" class="menu-link">
+                <span class="menu-icon">👥</span>
+                <span>About Us</span>
+            </a>
+            <a href="contact.html" class="menu-link">
+                <span class="menu-icon">☎️</span>
+                <span>Contact</span>
+            </a>
+        </div>
+        <div id="account-menu-container"></div>
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div style="padding: 0.75rem 1rem; color: var(--muted); font-size: 0.9rem;">
+                Switch between light and dark themes
+            </div>
+        </div>
+    </nav>
+
+    <!-- AUTH MODAL (updated with OTP signup) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-close" id="authCloseBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log in</button>
+                <button class="auth-tab" data-tab="signup">Create account</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <input type="tel" id="loginPhone" placeholder="Phone number" autocomplete="tel">
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <span class="toggle-eye" data-for="loginPassword">👁</span>
+                </div>
+                <button class="btn" id="modalLoginBtn">Log in</button>
+                <div class="forgot-link" id="forgotPasswordLink">Forgot password?</div>
+                <div class="demo-hint">Use your phone number and password</div>
+            </div>
+            
+            <!-- Signup Form with OTP (two steps) -->
+            <div id="signupForm" class="auth-form">
+                <!-- Main signup form -->
+                <div id="signupMainForm">
+                    <input type="text" id="signupFirstName" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="signupLastName" placeholder="Last name" autocomplete="family-name">
+                    <input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="tel">
+                    <input type="email" id="signupEmail" placeholder="Email address (for recovery)" autocomplete="email">
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="signupPassword">👁</span>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="confirmPassword">👁</span>
+                    </div>
+                    <select id="signupRole">
+                        <option value="player" selected>🎮 Player</option>
+                        <option value="developer">🛠️ Developer</option>
+                    </select>
+                    <!-- Terms agreement checkbox -->
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; accent-color: var(--accent); transform: scale(1.2);">
+                        <label for="agreeTerms" style="color: var(--text); font-size: 0.9rem;">
+                            I agree to the <a href="terms.html" target="_blank" style="color: var(--accent);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color: var(--accent);">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button class="btn" id="modalSignupBtn">Sign up</button>
+                    <div class="demo-hint">Password stored with simple hash (demo)</div>
+                </div>
+
+                <!-- OTP verification section (initially hidden) -->
+                <div id="otpSection" style="display: none;">
+                    <p id="otpMessage" style="color: var(--text); margin-bottom: 1rem;"></p>
+                    <input type="text" id="otpCode" placeholder="6‑digit code" maxlength="6" pattern="\d{6}" style="margin-bottom: 1rem;">
+                    <button class="btn" id="verifyOtpBtn">Verify Code</button>
+                    <button class="btn btn-outline" id="cancelOtpBtn" style="margin-top: 0.5rem;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form -->
+            <div id="forgotPasswordForm" class="auth-form">
+                <h3 style="margin-bottom: 1.5rem;">Reset password</h3>
+                <input type="tel" id="resetPhone" placeholder="Phone number" autocomplete="tel">
+                <input type="email" id="resetEmail" placeholder="Email address (for verification)" autocomplete="email">
+                <button class="btn" id="sendResetCodeBtn">Send reset code</button>
+                
+                <div id="resetCodeSection" style="display: none;">
+                    <div class="divider" style="margin: 1.5rem 0;"></div>
+                    <input type="text" id="resetCode" placeholder="6‑digit code">
+                    <div class="password-wrapper">
+                        <input type="password" id="resetNewPassword" placeholder="New password">
+                        <span class="toggle-eye" data-for="resetNewPassword">👁</span>
+                    </div>
+                    <button class="btn" id="confirmResetBtn">Reset password</button>
+                    <div class="demo-hint">🔎 Code will appear in console (demo)</div>
+                </div>
+                
+                <div class="back-to-login" id="backToLoginBtn">← Back to login</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 1.5rem;">
+            <section class="hero">
+                <div class="hero-track" id="track">
+                    <!-- Slides will be generated dynamically by JavaScript -->
+                </div>
+                <div class="counter-wrap">
+                    <svg class="counter-ring" viewBox="0 0 64 64">
+                        <circle class="counter-bg" cx="32" cy="32" r="30"/>
+                        <circle class="counter-progress" cx="32" cy="32" r="30" id="progressRing"/>
+                    </svg>
+                    <div class="counter-number" id="count">1</div>
+                </div>
+            </section>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <section class="full-width-section news-preview-section">
+            <div class="page-container">
+                <div class="section-header">
+                    <h2>Latest News & Updates</h2>
+                    <p class="section-subtitle">Stay informed about the latest games and platform updates</p>
+                </div>
+            </div>
+            <div id="newsPreviewList" class="news-list-container"></div>
+            <div class="page-container">
+                <a href="news.html" class="see-more-btn">
+                    See More News
+                    <span class="btn-icon">→</span>
+                </a>
+            </div>
+        </section>
+        
+        <section class="featured-games-section">
+            <div class="featured-carousel-container">
+                <div class="section-header">
+                    <h2>Featured Games</h2>
+                    <p class="section-subtitle">Discover the best games on mvura</p>
+                </div>
+                <div class="featured-carousel">
+                    <div class="carousel-controls">
+                        <button class="carousel-btn prev-btn" id="prevBtn">←</button>
+                        <button class="carousel-btn next-btn" id="nextBtn">→</button>
+                    </div>
+                    <div class="featured-track" id="featuredTrack"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="discover-more-section">
+            <div class="discover-more-container">
+                <a href="store.html" class="discover-more-btn">
+                    <span>Discover more in store</span>
+                    <span class="discover-icon">🎮</span>
+                </a>
+            </div>
+        </section>
+        
+        <!-- SIGN IN PROMPT (hidden when logged in) -->
+        <section class="signin-prompt" id="signinPrompt">
+            <div class="signin-prompt-container">
+                <div class="signin-prompt-content">
+                    <h3>Ready to dive deeper?</h3>
+                    <p>Sign in to your mvura account to save games, track your downloads, get personalized recommendations, and publish your own games.</p>
+                    <button class="signin-btn-large" id="signInPromptBtn">
+                        <span class="signin-icon">🔐</span>
+                        <span>Sign In to mvura</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <nav class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="cookies.html" class="footer-link">Cookie Policy</a>
+                <a href="dmca.html" class="footer-link">DMCA</a>
+                <a href="faq.html" class="footer-link">FAQ</a>
+                <a href="accessibility.html" class="footer-link">Accessibility</a>
+            </nav>
+            
+            <p class="footer-info">
+                For game submissions or support: <a href="mailto:ugartworks.comp@gmail.com" class="footer-email">ugartworks.comp@gmail.com</a>
+            </p>
+            
+            <div class="footer-copyright">
+                © 2026 mvura Game Platform. All rights reserved. UG ARTWORKS | Designed by James Mlelemba
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+    <!-- External Scripts -->
+    <script src="js/hero-data.js"></script>
+    <script src="js/featured-data.js"></script>
+    <script src="js/news-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+
+    <!-- Page‑Specific Script -->
+    <script>
+        // ========== HOME PAGE SCRIPT ==========
+        (function(){
+            "use strict";
+
+            const heroSlides = window.heroSlides || [];
+            const featuredGames = window.featuredGames || [];
+            const allNewsData = window.allNewsData || [];
+
+            function renderNewsPreview() {
+                const newsPreviewList = document.getElementById('newsPreviewList');
+                if (!newsPreviewList) return;
+                const previewData = [...allNewsData]
+                    .sort((a, b) => b.timestamp - a.timestamp)
+                    .slice(0, 4);
+                let html = '<div class="news-preview-list">';
+                previewData.forEach((article) => {
+                    const firstLetter = article.category.charAt(0);
+                    html += `
+                        <a href="news.html#article-${article.id}" class="news-preview-item">
+                            <div class="news-icon">
+                                <img src="${article.iconUrl}" alt="${article.title}" loading="lazy">
+                                <div class="news-icon-badge">${firstLetter}</div>
+                            </div>
+                            <div class="news-content">
+                                <h3 class="news-title">${article.title}</h3>
+                                <div class="news-meta">
+                                    <span class="news-category">${article.category}</span>
+                                    <span class="news-time">${article.date} • ${article.readTime}</span>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                });
+                html += '</div>';
+                newsPreviewList.innerHTML = html;
+            }
+
+            function renderFeaturedGames() {
+                const featuredTrack = document.getElementById('featuredTrack');
+                if (!featuredTrack) return;
+                let html = '';
+                featuredGames.forEach((game) => {
+                    html += `
+                        <div class="game-card" data-id="${game.id}">
+                            <div class="game-slide" style="background-image:url('${game.image}')">
+                                <a href="game.html?gameId=${game.id}"></a>
+                                <div class="game-content">
+                                    <div class="game-label">${game.label}</div>
+                                    <div class="game-title">${game.title}</div>
+                                    <div class="game-badge">${game.badge}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                featuredTrack.innerHTML = html;
+            }
+
+            function renderHeroCarousel() {
+                const track = document.getElementById('track');
+                if (!track || !heroSlides.length) return;
+                let slidesHtml = '';
+                heroSlides.forEach((slide, index) => {
+                    slidesHtml += `
+                        <div class="hero-slide ${index === 0 ? 'active' : ''}" data-id="${slide.id}">
+                            <img src="${slide.image}" alt="${slide.title}" loading="lazy">
+                            <div class="hero-content"><div class="hero-title">${slide.title}</div></div>
+                        </div>
+                    `;
+                });
+                track.innerHTML = slidesHtml;
+            }
+
+            function initHeroCarousel() {
+                const track = document.getElementById("track");
+                if (!track) return;
+                const slides = document.querySelectorAll(".hero-slide");
+                const counter = document.getElementById("count");
+                const progressRing = document.getElementById("progressRing");
+                const slideTime = 6000;
+                let currentIndex = 0;
+                let interval;
+                let isTransitioning = false;
+                const totalSlides = slides.length;
+                const isMobile = window.innerWidth <= 768;
+                const adjustedSlideTime = isMobile ? 7000 : 6000;
+                const counterSize = isMobile ? 38 : 38;
+                const circumference = 2 * Math.PI * counterSize;
+                progressRing.style.strokeDasharray = circumference;
+                
+                function updateProgress(progress) {
+                    const offset = circumference - (progress * circumference);
+                    progressRing.style.strokeDashoffset = offset;
+                }
+                updateProgress(0);
+                
+                function move(direction = 1) {
+                    if (isTransitioning) return;
+                    isTransitioning = true;
+                    slides[currentIndex].classList.remove('active');
+                    let newIndex = currentIndex + direction;
+                    let isWrapping = false;
+                    if (newIndex >= totalSlides) {
+                        newIndex = 0;
+                        isWrapping = true;
+                    } else if (newIndex < 0) {
+                        newIndex = totalSlides - 1;
+                        isWrapping = true;
+                    }
+                    const newPosition = -newIndex * 100;
+                    track.style.transition = "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)";
+                    track.style.transform = `translateX(${newPosition}%)`;
+                    counter.textContent = newIndex + 1;
+                    updateProgress(0);
+                    setTimeout(() => {
+                        if (isWrapping) {
+                            track.style.transition = 'none';
+                            track.style.transform = `translateX(${-newIndex * 100}%)`;
+                            track.offsetHeight;
+                            track.style.transition = "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)";
+                        }
+                        slides[newIndex].classList.add('active');
+                        currentIndex = newIndex;
+                        isTransitioning = false;
+                    }, 700);
+                }
+                
+                function startProgressAnimation() {
+                    let startTime = Date.now();
+                    let progress = 0;
+                    function animateProgress() {
+                        const elapsed = Date.now() - startTime;
+                        progress = Math.min(elapsed / adjustedSlideTime, 1);
+                        updateProgress(progress);
+                        if (progress < 1) {
+                            requestAnimationFrame(animateProgress);
+                        }
+                    }
+                    requestAnimationFrame(animateProgress);
+                }
+                
+                function startCarousel() {
+                    interval = setInterval(() => {
+                        move(1);
+                        startProgressAnimation();
+                    }, adjustedSlideTime);
+                    startProgressAnimation();
+                }
+                startCarousel();
+            }
+
+            function attachHeroClickHandlers() {
+                const slides = document.querySelectorAll('.hero-slide');
+                slides.forEach(slide => {
+                    slide.addEventListener('click', () => {
+                        const gameId = slide.dataset.id;
+                        if (gameId) {
+                            window.location.href = `game.html?gameId=${gameId}`;
+                        }
+                    });
+                });
+            }
+
+            function initFeaturedCarousel() {
+                const track = document.getElementById('featuredTrack');
+                if (!track) return;
+                const cards = [...track.children];
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                let isDown = false;
+                let startX = 0;
+                let currentX = 0;
+                let velocity = 0;
+                let lastX = 0;
+                let lastTime = 0;
+                let activeIndex = 0;
+
+                function clamp(x) {
+                    const min = track.parentElement.offsetWidth - track.scrollWidth;
+                    return Math.max(Math.min(x, 0), min);
+                }
+
+                function setTranslate(x) {
+                    currentX = clamp(x);
+                    track.style.transform = `translateX(${currentX}px)`;
+                    updateActive();
+                }
+
+                function updateActive() {
+                    const center = window.innerWidth / 2;
+                    cards.forEach((card, i) => {
+                        const rect = card.getBoundingClientRect();
+                        const cardCenter = rect.left + rect.width / 2;
+                        if (Math.abs(center - cardCenter) < rect.width / 2) {
+                            card.classList.add("active");
+                            activeIndex = i;
+                        } else {
+                            card.classList.remove("active");
+                        }
+                    });
+                }
+
+                function startDrag(x) {
+                    isDown = true;
+                    startX = x - currentX;
+                    lastX = x;
+                    lastTime = performance.now();
+                    velocity = 0;
+                    track.classList.add("dragging");
+                }
+
+                function dragMove(x) {
+                    if (!isDown) return;
+                    const now = performance.now();
+                    velocity = (x - lastX) / (now - lastTime);
+                    lastX = x;
+                    lastTime = now;
+                    setTranslate(x - startX);
+                    cards.forEach(card => {
+                        const tilt = Math.max(Math.min(velocity * 20, 8), -8);
+                        if (card.querySelector(".game-slide")) {
+                            card.querySelector(".game-slide").style.transform = `rotateY(${tilt}deg)`;
+                        }
+                    });
+                }
+
+                function endDrag() {
+                    if (!isDown) return;
+                    isDown = false;
+                    track.classList.remove("dragging");
+                    cards.forEach(card => {
+                        if (card.querySelector(".game-slide")) {
+                            card.querySelector(".game-slide").style.transform = "rotateY(0deg)";
+                        }
+                    });
+                    snapTo(activeIndex + (velocity < -0.2 ? 1 : velocity > 0.2 ? -1 : 0));
+                }
+
+                function snapTo(index) {
+                    index = Math.max(0, Math.min(cards.length - 1, index));
+                    activeIndex = index;
+                    const cardWidth = cards[0]?.offsetWidth + 16 || 0;
+                    animateTo(-index * cardWidth);
+                }
+
+                function animateTo(target) {
+                    const start = currentX;
+                    const dist = clamp(target) - start;
+                    const duration = 420;
+                    const startTime = performance.now();
+                    function step(t) {
+                        const p = Math.min((t - startTime) / duration, 1);
+                        const ease = 1 - Math.pow(1 - p, 3);
+                        setTranslate(start + dist * ease);
+                        if (p < 1) requestAnimationFrame(step);
+                    }
+                    requestAnimationFrame(step);
+                }
+
+                track.addEventListener("mousedown", e => startDrag(e.pageX));
+                window.addEventListener("mousemove", e => dragMove(e.pageX));
+                window.addEventListener("mouseup", endDrag);
+                track.addEventListener("touchstart", e => startDrag(e.touches[0].pageX), { passive: true });
+                track.addEventListener("touchmove", e => dragMove(e.touches[0].pageX), { passive: true });
+                track.addEventListener("touchend", endDrag);
+                if (prevBtn) prevBtn.addEventListener("click", () => snapTo(activeIndex - 1));
+                if (nextBtn) nextBtn.addEventListener("click", () => snapTo(activeIndex + 1));
+                window.addEventListener("keydown", e => {
+                    if (e.key === "ArrowRight") snapTo(activeIndex + 1);
+                    if (e.key === "ArrowLeft") snapTo(activeIndex - 1);
+                });
+                setTranslate(0);
+                window.addEventListener('resize', () => {
+                    setTranslate(currentX);
+                });
+            }
+
+            function updateSignInPrompt() {
+                const prompt = document.getElementById('signinPrompt');
+                if (prompt) {
+                    prompt.classList.toggle('hidden', Auth.isLoggedIn());
+                }
+            }
+
+            const backToTopBtn = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                backToTopBtn.classList.toggle('visible', window.pageYOffset > 300);
+            });
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                backToTopBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => { backToTopBtn.style.transform = ''; }, 200);
+            });
+
+            function init() {
+                renderHeroCarousel();
+                renderNewsPreview();
+                renderFeaturedGames();
+                initHeroCarousel();
+                attachHeroClickHandlers();
+                initFeaturedCarousel();
+                updateSignInPrompt();
+
+                window.addEventListener('authStateChanged', updateSignInPrompt);
+
+                const signInPromptBtn = document.getElementById('signInPromptBtn');
+                if (signInPromptBtn) {
+                    signInPromptBtn.addEventListener('click', () => Auth.openAuthModal('login'));
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+</html>

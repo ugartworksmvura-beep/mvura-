@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMCA / Copyright - mvura</title>
+<link rel="icon" type="image/svg+xml" href="/mvurafavicon.svg">
+<link rel="icon" type="image/x-icon" href="/mvurafavicon.ico">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* ========== DMCA PAGE SPECIFIC STYLES ========== */
+        .main-content {
+            margin-top: 70px;
+            padding: 0;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .policy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .policy-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .policy-header p {
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+
+        .policy-section {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .policy-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 0.75rem;
+        }
+
+        .policy-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 1.5rem 0 1rem;
+        }
+
+        .policy-section p, .policy-section li {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .policy-section ul, .policy-section ol {
+            padding-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .policy-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .policy-section strong {
+            color: var(--accent);
+        }
+
+        .policy-section .highlight {
+            background: rgba(var(--accent-rgb), 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .policy-section .sample-notice {
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 1rem 0;
+            color: var(--text);
+        }
+
+        .last-updated {
+            text-align: right;
+            font-style: italic;
+            color: var(--muted);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--line);
+        }
+
+        @media (max-width: 768px) {
+            .policy-header h1 {
+                font-size: 2.2rem;
+            }
+            .policy-section {
+                padding: 1.5rem;
+            }
+            .policy-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container" onclick="location.href='index.html'">
+                <div class="logo-emoji">💧</div>
+                <div class="logo-text">mvura</div>
+            </div>
+            <div class="header-page-title">DMCA / COPYRIGHT</div>
+            <div class="menu-container">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Dropdown Menu -->
+    <nav class="dropdown-menu" id="dropdownMenu">
+        <button class="menu-close-btn" id="menuCloseBtn">✕</button>
+        <div class="menu-section">
+            <div class="menu-title">Navigation</div>
+            <a href="index.html" class="menu-link"><span class="menu-icon">🏠</span><span>Home</span></a>
+            <a href="store.html" class="menu-link"><span class="menu-icon">🎮</span><span>Games Store</span></a>
+            <a href="publish.html" class="menu-link" id="staticPublishLink"><span class="menu-icon">🚀</span><span>Publish Game</span></a>
+            <a href="news.html" class="menu-link"><span class="menu-icon">📰</span><span>News & Updates</span></a>
+            <a href="about.html" class="menu-link"><span class="menu-icon">👥</span><span>About Us</span></a>
+            <a href="contact.html" class="menu-link"><span class="menu-icon">☎️</span><span>Contact</span></a>
+        </div>
+        <div id="account-menu-container"></div>
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div style="padding: 0.75rem 1rem; color: var(--muted); font-size: 0.9rem;">
+                Switch between light and dark themes
+            </div>
+        </div>
+    </nav>
+
+    <!-- AUTH MODAL (updated with OTP signup) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-close" id="authCloseBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log in</button>
+                <button class="auth-tab" data-tab="signup">Create account</button>
+            </div>
+            
+            <!-- Login Form (unchanged) -->
+            <div id="loginForm" class="auth-form active">
+                <input type="tel" id="loginPhone" placeholder="Phone number" autocomplete="tel">
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <span class="toggle-eye" data-for="loginPassword">👁</span>
+                </div>
+                <button class="btn" id="modalLoginBtn">Log in</button>
+                <div class="forgot-link" id="forgotPasswordLink">Forgot password?</div>
+                <div class="demo-hint">Use your phone number and password</div>
+            </div>
+            
+            <!-- Signup Form with OTP -->
+            <div id="signupForm" class="auth-form">
+                <!-- Main signup form -->
+                <div id="signupMainForm">
+                    <input type="text" id="signupFirstName" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="signupLastName" placeholder="Last name" autocomplete="family-name">
+                    <input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="tel">
+                    <input type="email" id="signupEmail" placeholder="Email address (for recovery)" autocomplete="email">
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="signupPassword">👁</span>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="confirmPassword">👁</span>
+                    </div>
+                    <select id="signupRole">
+                        <option value="player" selected>🎮 Player</option>
+                        <option value="developer">🛠️ Developer</option>
+                    </select>
+                    <!-- Terms agreement checkbox -->
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; accent-color: var(--accent); transform: scale(1.2);">
+                        <label for="agreeTerms" style="color: var(--text); font-size: 0.9rem;">
+                            I agree to the <a href="terms.html" target="_blank" style="color: var(--accent);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color: var(--accent);">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button class="btn" id="modalSignupBtn">Sign up</button>
+                    <div class="demo-hint">Password stored with simple hash (demo)</div>
+                </div>
+
+                <!-- OTP verification section (initially hidden) -->
+                <div id="otpSection" style="display: none;">
+                    <p id="otpMessage" style="color: var(--text); margin-bottom: 1rem;"></p>
+                    <input type="text" id="otpCode" placeholder="6‑digit code" maxlength="6" pattern="\d{6}" style="margin-bottom: 1rem;">
+                    <button class="btn" id="verifyOtpBtn">Verify Code</button>
+                    <button class="btn btn-outline" id="cancelOtpBtn" style="margin-top: 0.5rem;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form (unchanged) -->
+            <div id="forgotPasswordForm" class="auth-form">
+                <h3 style="margin-bottom: 1.5rem;">Reset password</h3>
+                <input type="tel" id="resetPhone" placeholder="Phone number" autocomplete="tel">
+                <input type="email" id="resetEmail" placeholder="Email address (for verification)" autocomplete="email">
+                <button class="btn" id="sendResetCodeBtn">Send reset code</button>
+                
+                <div id="resetCodeSection" style="display: none;">
+                    <div style="margin: 1.5rem 0;"></div>
+                    <input type="text" id="resetCode" placeholder="6‑digit code">
+                    <div class="password-wrapper">
+                        <input type="password" id="resetNewPassword" placeholder="New password">
+                        <span class="toggle-eye" data-for="resetNewPassword">👁</span>
+                    </div>
+                    <button class="btn" id="confirmResetBtn">Reset password</button>
+                    <div class="demo-hint">🔎 Code will appear in console (demo)</div>
+                </div>
+                
+                <div class="back-to-login" id="backToLoginBtn">← Back to login</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-container">
+            <div class="policy-header">
+                <h1>DMCA & Copyright Policy</h1>
+                <p>Last updated: 28 February 2026</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>1. Introduction</h2>
+                <p>mvura respects the intellectual property rights of others and expects its users to do the same. In accordance with the <strong>Malawi Copyright Act (Cap 49:01)</strong> and international copyright treaties, we have adopted a policy to respond to notices of alleged copyright infringement. This page describes the procedure for submitting a takedown notice and how to file a counter‑notification if your content was removed by mistake.</p>
+                <p>We also comply with the <strong>Digital Millennium Copyright Act (DMCA)</strong> for users in the United States, and our process is designed to be compatible with similar laws worldwide.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>2. Designated Copyright Agent</h2>
+                <p>All notices of alleged copyright infringement should be sent to our Designated Copyright Agent:</p>
+                <ul>
+                    <li><strong>Email:</strong> <a href="mailto:copyright@mvura.games" style="color: var(--accent);">copyright@mvura.games</a></li>
+                    <li><strong>Postal Address:</strong> UG ARTWORKS, Attn: Copyright Agent, P.O. Box [to be inserted], Lilongwe, Malawi</li>
+                    <li><strong>Phone:</strong> +265 (0) [to be inserted] (for urgent matters only)</li>
+                </ul>
+                <p><strong>Important:</strong> Please include "Copyright Notice" in the subject line of your email to ensure prompt handling.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>3. Filing a Copyright Infringement Notification</h2>
+                <p>If you believe that your copyrighted work has been copied, displayed, or distributed on mvura in a way that constitutes copyright infringement, please provide our Copyright Agent with a written notification that includes the following information (as required by the Malawi Copyright Act and the DMCA):</p>
+                <ol>
+                    <li>A physical or electronic signature of the copyright owner or a person authorised to act on their behalf.</li>
+                    <li>Identification of the copyrighted work claimed to have been infringed, or if multiple works are covered by a single notification, a representative list of such works.</li>
+                    <li>Identification of the material that is claimed to be infringing and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit us to locate the material (e.g., the URL of the game page).</li>
+                    <li>Information reasonably sufficient to permit us to contact the complaining party, such as an address, telephone number, and, if available, an email address.</li>
+                    <li>A statement that the complaining party has a good‑faith belief that use of the material in the manner complained of is not authorised by the copyright owner, its agent, or the law.</li>
+                    <li>A statement that the information in the notification is accurate, and under penalty of perjury, that the complaining party is authorised to act on behalf of the owner of an exclusive right that is allegedly infringed.</li>
+                </ol>
+                <p>Failure to include all required information may result in a delay in processing your request. Incomplete notices may be disregarded.</p>
+                
+                <h3>Sample Notification Format</h3>
+                <div class="sample-notice">
+                    [DATE]<br><br>
+                    To: mvura Copyright Agent<br>
+                    Email: copyright@mvura.games<br><br>
+                    I, the undersigned, state UNDER PENALTY OF PERJURY that:<br><br>
+                    1. I am the owner (or authorised agent of the owner) of the copyrighted work described below.<br>
+                    2. The copyrighted work is: [title, description, and if applicable, registration number].<br>
+                    3. The infringing material is located at: [URL(s) of the game(s) on mvura].<br>
+                    4. I have a good‑faith belief that the use of the material in the manner complained of is not authorised by me, my agent, or the law.<br>
+                    5. The information in this notice is accurate.<br><br>
+                    Signature: __________________________<br>
+                    Name: ______________________________<br>
+                    Address: ____________________________<br>
+                    Phone: ______________________________<br>
+                    Email: ______________________________<br>
+                </div>
+            </div>
+
+            <div class="policy-section">
+                <h2>4. Action Upon Receipt of a Valid Notice</h2>
+                <p>Upon receipt of a valid copyright infringement notification that complies with the requirements above, we will:</p>
+                <ul>
+                    <li>Remove or disable access to the allegedly infringing material promptly.</li>
+                    <li>Take reasonable steps to notify the user who posted the material (the "alleged infringer") that we have removed or disabled access to the material.</li>
+                    <li>Provide the user with a copy of the infringement notice and information about how to file a counter‑notification.</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h2>5. Filing a Counter‑Notification</h2>
+                <p>If you believe that your content was removed or disabled as a result of mistake or misidentification, you may file a counter‑notification with our Copyright Agent. To be effective, a counter‑notification must be a written communication provided to our Agent that includes substantially the following:</p>
+                <ol>
+                    <li>Your physical or electronic signature.</li>
+                    <li>Identification of the material that has been removed or to which access has been disabled and the location at which the material appeared before it was removed or disabled.</li>
+                    <li>A statement under penalty of perjury that you have a good‑faith belief that the material was removed or disabled as a result of mistake or misidentification.</li>
+                    <li>Your name, address, and telephone number, and a statement that you consent to the jurisdiction of the courts of Malawi (specifically the High Court of Malawi) and that you will accept service of process from the person who provided the original infringement notification or an agent of such person.</li>
+                </ol>
+                <p>Please send your counter‑notification to the same contact details listed in Section 2.</p>
+
+                <h3>Sample Counter‑Notification Format</h3>
+                <div class="sample-notice">
+                    [DATE]<br><br>
+                    To: mvura Copyright Agent<br>
+                    Email: copyright@mvura.games<br><br>
+                    I, the undersigned, state UNDER PENALTY OF PERJURY that:<br><br>
+                    1. I am the user whose content was removed from mvura.<br>
+                    2. The material removed was located at: [URL(s) of the removed content].<br>
+                    3. I have a good‑faith belief that the material was removed or disabled as a result of mistake or misidentification.<br>
+                    4. I consent to the jurisdiction of the courts of Malawi and will accept service of process from the party who filed the original infringement notice or their agent.<br><br>
+                    Signature: __________________________<br>
+                    Name: ______________________________<br>
+                    Address: ____________________________<br>
+                    Phone: ______________________________<br>
+                    Email: ______________________________<br>
+                </div>
+            </div>
+
+            <div class="policy-section">
+                <h2>6. Repeat Infringer Policy</h2>
+                <p>In accordance with the Malawi Copyright Act and the DMCA, we have adopted a policy to terminate, in appropriate circumstances, the accounts of users who are deemed repeat infringers. We may also, at our sole discretion, limit access to the service and/or terminate the accounts of any users who infringe any intellectual property rights of others, whether or not there is repeat infringement.</p>
+                <p>A "repeat infringer" is a user who has been the subject of more than one valid copyright infringement notification. We maintain a list of such users and terminate accounts accordingly.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>7. Misrepresentations</h2>
+                <p>Under Section 512(f) of the DMCA and similar provisions in Malawian law, any person who knowingly materially misrepresents that material is infringing, or that material was removed or disabled by mistake, may be liable for damages (including costs and attorneys' fees). Please be certain that you are the rights holder or have a good‑faith belief that the material is infringing before submitting a notice.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>8. Withdrawal of Claims</h2>
+                <p>If you submitted a takedown notice and later determine that you made a mistake, you may withdraw the notice by sending a written withdrawal to our Copyright Agent. The withdrawal must be signed by the original complainant and include sufficient information to identify the notice and the material. Upon receipt, we will evaluate whether to restore the material.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>9. Contact Information</h2>
+                <p>For any questions about this DMCA / Copyright Policy, please contact us:</p>
+                <ul>
+                    <li>By email: <a href="mailto:copyright@mvura.games" style="color: var(--accent);">copyright@mvura.games</a></li>
+                    <li>By visiting our contact page: <a href="contact.html" style="color: var(--accent);">Contact Us</a></li>
+                    <li>By mail: UG ARTWORKS, Attn: Copyright Agent, P.O. Box [to be inserted], Lilongwe, Malawi</li>
+                </ul>
+            </div>
+
+            <div class="last-updated">
+                This DMCA / Copyright Policy was last updated on 28 February 2026.
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <nav class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="cookies.html" class="footer-link">Cookie Policy</a>
+                <a href="dmca.html" class="footer-link">DMCA</a>
+                <a href="faq.html" class="footer-link">FAQ</a>
+                <a href="accessibility.html" class="footer-link">Accessibility</a>
+            </nav>
+            <p class="footer-info">
+                For game submissions or support: <a href="mailto:ugartworks.comp@gmail.com" class="footer-email">ugartworks.comp@gmail.com</a>
+            </p>
+            <div class="footer-copyright">
+                © 2026 mvura Game Platform. All rights reserved. UG ARTWORKS | Designed by James Mlelemba
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><span>↑</span></button>
+
+    <!-- External Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+</body>
+</html>

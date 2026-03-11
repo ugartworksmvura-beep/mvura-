@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - mvura</title>
+<link rel="icon" type="image/svg+xml" href="/mvurafavicon.svg">
+<link rel="icon" type="image/x-icon" href="/mvurafavicon.ico">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* ========== PRIVACY PAGE SPECIFIC STYLES ========== */
+        .main-content {
+            margin-top: 70px;
+            padding: 0;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .policy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .policy-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .policy-header p {
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+
+        .policy-section {
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .policy-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 0.75rem;
+        }
+
+        .policy-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 1.5rem 0 1rem;
+        }
+
+        .policy-section p, .policy-section li {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .policy-section ul, .policy-section ol {
+            padding-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .policy-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .policy-section strong {
+            color: var(--accent);
+        }
+
+        .policy-section .highlight {
+            background: rgba(var(--accent-rgb), 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .last-updated {
+            text-align: right;
+            font-style: italic;
+            color: var(--muted);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--line);
+        }
+
+        @media (max-width: 768px) {
+            .policy-header h1 {
+                font-size: 2.2rem;
+            }
+            .policy-section {
+                padding: 1.5rem;
+            }
+            .policy-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container" onclick="location.href='index.html'">
+                <div class="logo-emoji">💧</div>
+                <div class="logo-text">mvura</div>
+            </div>
+            <div class="header-page-title">PRIVACY POLICY</div>
+            <div class="menu-container">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Dropdown Menu -->
+    <nav class="dropdown-menu" id="dropdownMenu">
+        <button class="menu-close-btn" id="menuCloseBtn">✕</button>
+        <div class="menu-section">
+            <div class="menu-title">Navigation</div>
+            <a href="index.html" class="menu-link"><span class="menu-icon">🏠</span><span>Home</span></a>
+            <a href="store.html" class="menu-link"><span class="menu-icon">🎮</span><span>Games Store</span></a>
+            <a href="publish.html" class="menu-link" id="staticPublishLink"><span class="menu-icon">🚀</span><span>Publish Game</span></a>
+            <a href="news.html" class="menu-link"><span class="menu-icon">📰</span><span>News & Updates</span></a>
+            <a href="about.html" class="menu-link"><span class="menu-icon">👥</span><span>About Us</span></a>
+            <a href="contact.html" class="menu-link"><span class="menu-icon">☎️</span><span>Contact</span></a>
+        </div>
+        <div id="account-menu-container"></div>
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div style="padding: 0.75rem 1rem; color: var(--muted); font-size: 0.9rem;">
+                Switch between light and dark themes
+            </div>
+        </div>
+    </nav>
+
+    <!-- AUTH MODAL (updated with OTP signup) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-close" id="authCloseBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log in</button>
+                <button class="auth-tab" data-tab="signup">Create account</button>
+            </div>
+            
+            <!-- Login Form (unchanged) -->
+            <div id="loginForm" class="auth-form active">
+                <input type="tel" id="loginPhone" placeholder="Phone number" autocomplete="tel">
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <span class="toggle-eye" data-for="loginPassword">👁</span>
+                </div>
+                <button class="btn" id="modalLoginBtn">Log in</button>
+                <div class="forgot-link" id="forgotPasswordLink">Forgot password?</div>
+                <div class="demo-hint">Use your phone number and password</div>
+            </div>
+            
+            <!-- Signup Form with OTP (updated) -->
+            <div id="signupForm" class="auth-form">
+                <!-- Main signup form (step 1) -->
+                <div id="signupMainForm">
+                    <input type="text" id="signupFirstName" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="signupLastName" placeholder="Last name" autocomplete="family-name">
+                    <input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="tel">
+                    <input type="email" id="signupEmail" placeholder="Email address (for recovery)" autocomplete="email">
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="signupPassword">👁</span>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="confirmPassword">👁</span>
+                    </div>
+                    <select id="signupRole">
+                        <option value="player" selected>🎮 Player</option>
+                        <option value="developer">🛠️ Developer</option>
+                    </select>
+                    <!-- Terms agreement checkbox -->
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; accent-color: var(--accent); transform: scale(1.2);">
+                        <label for="agreeTerms" style="color: var(--text); font-size: 0.9rem;">
+                            I agree to the <a href="terms.html" target="_blank" style="color: var(--accent);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color: var(--accent);">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button class="btn" id="modalSignupBtn">Sign up</button>
+                    <div class="demo-hint">Password stored with simple hash (demo)</div>
+                </div>
+
+                <!-- OTP verification section (step 2, initially hidden) -->
+                <div id="otpSection" style="display: none;">
+                    <p id="otpMessage" style="color: var(--text); margin-bottom: 1rem;"></p>
+                    <input type="text" id="otpCode" placeholder="6‑digit code" maxlength="6" pattern="\d{6}" style="margin-bottom: 1rem;">
+                    <button class="btn" id="verifyOtpBtn">Verify Code</button>
+                    <button class="btn btn-outline" id="cancelOtpBtn" style="margin-top: 0.5rem;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form (unchanged) -->
+            <div id="forgotPasswordForm" class="auth-form">
+                <h3 style="margin-bottom: 1.5rem;">Reset password</h3>
+                <input type="tel" id="resetPhone" placeholder="Phone number" autocomplete="tel">
+                <input type="email" id="resetEmail" placeholder="Email address (for verification)" autocomplete="email">
+                <button class="btn" id="sendResetCodeBtn">Send reset code</button>
+                
+                <div id="resetCodeSection" style="display: none;">
+                    <div style="margin: 1.5rem 0;"></div>
+                    <input type="text" id="resetCode" placeholder="6‑digit code">
+                    <div class="password-wrapper">
+                        <input type="password" id="resetNewPassword" placeholder="New password">
+                        <span class="toggle-eye" data-for="resetNewPassword">👁</span>
+                    </div>
+                    <button class="btn" id="confirmResetBtn">Reset password</button>
+                    <div class="demo-hint">🔎 Code will appear in console (demo)</div>
+                </div>
+                
+                <div class="back-to-login" id="backToLoginBtn">← Back to login</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (privacy policy text, unchanged) -->
+    <main class="main-content">
+        <div class="page-container">
+            <div class="policy-header">
+                <h1>Privacy Policy</h1>
+                <p>Last updated: 28 February 2026</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>1. Introduction</h2>
+                <p>Welcome to mvura, a game distribution platform operated by UG ARTWORKS, a company registered in Malawi (Registration Number: [to be inserted]). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services. Please read this policy carefully. If you do not agree with the terms, do not access the site or use our services.</p>
+                <p>We are committed to protecting your privacy in accordance with the Malawi <strong>Electronic Transactions Act (Cap 48:05)</strong> and the <strong>Data Protection Act (No. 7 of 2024)</strong>. By using mvura, you consent to the practices described in this policy.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>2. Information We Collect</h2>
+                <p>We collect several types of information for various purposes to provide and improve our service to you.</p>
+                
+                <h3>2.1 Personal Data</h3>
+                <p>While using our service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you ("Personal Data"). This may include, but is not limited to:</p>
+                <ul>
+                    <li>First name and last name</li>
+                    <li>Phone number (used as your primary identifier)</li>
+                    <li>Email address (for account recovery and communications)</li>
+                    <li>Payment information (processed through third‑party providers – we do not store full payment details)</li>
+                    <li>Profile picture and biographical information (if you choose to provide them)</li>
+                </ul>
+
+                <h3>2.2 Usage Data</h3>
+                <p>We may also collect information on how the service is accessed and used ("Usage Data"). This may include your computer's Internet Protocol (IP) address, browser type, browser version, the pages of our service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers, and other diagnostic data.</p>
+
+                <h3>2.3 Cookies and Tracking Technologies</h3>
+                <p>We use cookies and similar tracking technologies to track activity on our service and hold certain information. Cookies are files with a small amount of data which may include an anonymous unique identifier. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our service. For more details, please see our <a href="cookies.html" style="color: var(--accent);">Cookie Policy</a>.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>3. How We Use Your Information</h2>
+                <p>We use the collected data for various purposes:</p>
+                <ul>
+                    <li>To provide and maintain our service</li>
+                    <li>To notify you about changes to our service</li>
+                    <li>To allow you to participate in interactive features when you choose to do so</li>
+                    <li>To provide customer support</li>
+                    <li>To gather analysis or valuable information so that we can improve our service</li>
+                    <li>To monitor the usage of our service</li>
+                    <li>To detect, prevent and address technical issues</li>
+                    <li>To process your transactions (game purchases, payouts to developers)</li>
+                    <li>To send you promotional communications (only with your consent)</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h2>4. Legal Basis for Processing Personal Data (GDPR & Malawi Law)</h2>
+                <p>If you are from the EEA or Malawi, our legal basis for collecting and using your personal information depends on the data and the context in which we collect it. We may process your personal data because:</p>
+                <ul>
+                    <li>We need to perform a contract with you (e.g., to provide games you purchased).</li>
+                    <li>You have given us permission to do so (consent).</li>
+                    <li>The processing is in our legitimate interests and it is not overridden by your rights.</li>
+                    <li>To comply with the law (e.g., record‑keeping for tax purposes).</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h2>5. Retention of Data</h2>
+                <p>We will retain your Personal Data only for as long as is necessary for the purposes set out in this Privacy Policy. We will retain and use your Personal Data to the extent necessary to comply with our legal obligations (for example, if we are required to retain your data to comply with applicable laws), resolve disputes, and enforce our legal agreements and policies.</p>
+                <p>We will also retain Usage Data for internal analysis purposes. Usage Data is generally retained for a shorter period, except when this data is used to strengthen the security or to improve the functionality of our service, or we are legally obligated to retain this data for longer periods.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>6. Transfer of Data</h2>
+                <p>Your information, including Personal Data, may be transferred to — and maintained on — computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ from those of your jurisdiction. We are based in Malawi, and we use service providers that may host data in various countries. By using our service, you consent to such transfers.</p>
+                <p>We will take all steps reasonably necessary to ensure that your data is treated securely and in accordance with this Privacy Policy and no transfer of your Personal Data will take place to an organisation or a country unless there are adequate controls in place including the security of your data.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>7. Disclosure of Data</h2>
+                <p>We may disclose your Personal Data in the good faith belief that such action is necessary to:</p>
+                <ul>
+                    <li>Comply with a legal obligation (e.g., a court order from a Malawian court).</li>
+                    <li>Protect and defend the rights or property of mvura.</li>
+                    <li>Prevent or investigate possible wrongdoing in connection with the service.</li>
+                    <li>Protect the personal safety of users of the service or the public.</li>
+                    <li>Protect against legal liability.</li>
+                </ul>
+                <p>We may also share your information with third‑party service providers who perform services on our behalf (e.g., payment processors, hosting providers, analytics). These providers are contractually bound to protect your information.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>8. Security of Data</h2>
+                <p>The security of your data is important to us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute security. We implement appropriate technical and organisational measures, including encryption (SSL/TLS) and access controls.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>9. Your Rights</h2>
+                <p>Under the Malawi Data Protection Act and similar laws, you have certain rights regarding your personal information:</p>
+                <ul>
+                    <li><strong>Right to access:</strong> You can request a copy of the personal data we hold about you.</li>
+                    <li><strong>Right to rectification:</strong> You can ask us to correct inaccurate or incomplete data.</li>
+                    <li><strong>Right to erasure:</strong> You can ask us to delete your personal data, subject to certain conditions.</li>
+                    <li><strong>Right to restrict processing:</strong> You can ask us to suspend the processing of your data.</li>
+                    <li><strong>Right to data portability:</strong> You can request a copy of your data in a machine‑readable format.</li>
+                    <li><strong>Right to object:</strong> You can object to our processing of your data (e.g., for direct marketing).</li>
+                </ul>
+                <p>To exercise any of these rights, please contact us at <a href="mailto:privacy@mvura.games" style="color: var(--accent);">privacy@mvura.games</a>. We will respond within one month as required by law.</p>
+                <div class="highlight">
+                    <p><strong>Note:</strong> If you are a Malawi resident, you also have the right to lodge a complaint with the Malawi Communications Regulatory Authority (MACRA) or the Data Protection Commissioner if you believe our processing of your personal data violates applicable law.</p>
+                </div>
+            </div>
+
+            <div class="policy-section">
+                <h2>10. Children's Privacy</h2>
+                <p>Our service does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from anyone under the age of 13. If you are a parent or guardian and you are aware that your child has provided us with Personal Data, please contact us. If we become aware that we have collected Personal Data from children without verification of parental consent, we take steps to remove that information from our servers.</p>
+                <p>We also offer parental control tools – see our <a href="faq.html#parental" style="color: var(--accent);">FAQ</a> for more details.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>11. Changes to This Privacy Policy</h2>
+                <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "last updated" date at the top. You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>12. Contact Us</h2>
+                <p>If you have any questions about this Privacy Policy, please contact us:</p>
+                <ul>
+                    <li>By email: <a href="mailto:privacy@mvura.games" style="color: var(--accent);">privacy@mvura.games</a></li>
+                    <li>By visiting our contact page: <a href="contact.html" style="color: var(--accent);">Contact Us</a></li>
+                    <li>By mail: UG ARTWORKS, P.O. Box [to be inserted], Lilongwe, Malawi</li>
+                </ul>
+            </div>
+
+            <div class="last-updated">
+                This Privacy Policy was last updated on 28 February 2026.
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <nav class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="cookies.html" class="footer-link">Cookie Policy</a>
+                <a href="dmca.html" class="footer-link">DMCA</a>
+                <a href="faq.html" class="footer-link">FAQ</a>
+                <a href="accessibility.html" class="footer-link">Accessibility</a>
+            </nav>
+            <p class="footer-info">
+                For game submissions or support: <a href="mailto:ugartworks.comp@gmail.com" class="footer-email">ugartworks.comp@gmail.com</a>
+            </p>
+            <div class="footer-copyright">
+                © 2026 mvura Game Platform. All rights reserved. UG ARTWORKS | Designed by James Mlelemba
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><span>↑</span></button>
+
+    <!-- External Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+</body>
+</html>

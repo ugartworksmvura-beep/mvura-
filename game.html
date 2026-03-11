@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Game Details - mvura</title>
+<link rel="icon" type="image/svg+xml" href="/mvurafavicon.svg">
+<link rel="icon" type="image/x-icon" href="/mvurafavicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* ========== GAME DETAIL PAGE SPECIFIC STYLES ========== */
+        :root {
+            --btn-primary: #1e4d3f;
+            --btn-primary-light: #2d6a5a;
+            --radius: 12px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        body.dark {
+            --btn-primary: #1a3d32;
+            --btn-primary-light: #245745;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ============ ENHANCED BACK BUTTON ============ */
+        .fixed-back-container {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            z-index: 1001;
+            transition: opacity 0.3s ease;
+        }
+
+        body.menu-open .fixed-back-container {
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+        }
+
+        .fixed-back-btn {
+            background: transparent;
+            color: var(--accent);
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius);
+            border: 2px solid var(--accent);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .fixed-back-btn:hover {
+            transform: translateX(-5px);
+            background: rgba(var(--accent-rgb), 0.1);
+            box-shadow: 0 4px 15px rgba(var(--accent-rgb), 0.2);
+        }
+
+        /* ============ MAIN CONTENT ============ */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 1.5rem 3rem;
+            position: relative;
+        }
+
+        .poster {
+            width: 100%;
+            height: 600px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin: 0 0 4rem;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--line);
+            animation: heroZoom 1.2s ease-out;
+        }
+
+        @keyframes heroZoom {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 8s ease-out;
+        }
+
+        .poster:hover img {
+            transform: scale(1.05);
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--muted);
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+        }
+
+        .details {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            margin-bottom: 3rem;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+
+        .details h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .details-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .details-label {
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .details-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .price-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--btn-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .buy-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 3rem 0;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .price-display {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .price-amount {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .currency {
+            font-size: 1.5rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .amount {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--btn-primary), var(--btn-primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-note {
+            font-size: 0.9rem;
+            color: var(--muted);
+            opacity: 0.8;
+        }
+
+        .buy-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--btn-primary) 0%, var(--btn-primary-light) 100%);
+            color: white;
+            border: none;
+            padding: 0;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .buy-button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, var(--btn-primary-light) 0%, var(--btn-primary) 100%);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .buy-button:active {
+            transform: translateY(0);
+        }
+
+        .button-content {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            position: relative;
+        }
+
+        .button-icon {
+            font-size: 1.4rem;
+            margin-right: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .button-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.2rem;
+            color: white;
+        }
+
+        .button-subtitle {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .button-arrow {
+            font-size: 1rem;
+            opacity: 0.7;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .buy-button:hover .button-arrow {
+            transform: translateX(5px);
+        }
+
+        .payment-security {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .security-badge i {
+            color: var(--success);
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .method-badge {
+            background: rgba(var(--accent-rgb), 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid var(--line);
+            color: var(--text);
+        }
+
+        .media-section {
+            margin: 3.5rem 0 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--accent);
+        }
+
+        .media-gallery {
+            display: flex;
+            overflow-x: auto;
+            gap: 1.5rem;
+            padding: 1rem 0 2rem;
+            cursor: grab;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+
+        .media-gallery::-webkit-scrollbar {
+            display: none;
+        }
+
+        .media-gallery:active {
+            cursor: grabbing;
+        }
+
+        .media-item {
+            flex: 0 0 auto;
+            width: 600px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--line);
+            transition: transform 0.3s ease;
+        }
+
+        .media-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        .media-header {
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .media-header i {
+            color: var(--accent);
+        }
+
+        .media-wrapper {
+            width: 100%;
+            height: 360px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .media-wrapper iframe,
+        .media-wrapper img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .media-wrapper iframe {
+            border: none;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .media-wrapper img {
+            object-fit: cover;
+        }
+
+        .media-item:hover .media-wrapper iframe,
+        .media-item:hover .media-wrapper img {
+            transform: scale(1.02);
+        }
+
+        .media-gallery {
+            scroll-snap-type: x mandatory;
+        }
+        
+        .media-item {
+            scroll-snap-align: start;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--header-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--header-border);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 450px;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 48px rgba(0,0,0,0.2);
+            color: var(--text);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1rem 1rem 0.25rem;
+            border-bottom: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-game-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            line-height: 1;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 0;
+            width: auto;
+            height: auto;
+            display: inline-block;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+            background: none;
+            transform: none;
+        }
+
+        .modal-body {
+            padding: 0 1.25rem 1.5rem;
+            max-height: calc(85vh - 100px);
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            background: var(--bg);
+            border: 2px solid var(--line);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:read-only {
+            background: rgba(var(--accent-rgb), 0.05);
+            color: var(--muted);
+            cursor: not-allowed;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-option {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem 0.25rem;
+            background: var(--bg);
+            border: 2px solid var(--line);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .payment-option.active {
+            border-color: var(--accent);
+            background: rgba(var(--accent-rgb), 0.05);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .payment-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+            color: var(--accent);
+        }
+
+        .download-progress-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 1rem;
+        }
+
+        .download-progress-modal {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .download-progress-modal h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .progress-container {
+            background: var(--bg);
+            height: 12px;
+            border-radius: 6px;
+            margin: 2rem 0;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--line);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .download-progress-modal p {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .download-progress-modal button {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--line);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .download-progress-modal button:hover {
+            background: rgba(var(--accent-rgb), 0.1);
+            color: var(--text);
+            border-color: var(--accent);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 350px;
+            z-index: 3001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            font-size: 1.2rem;
+        }
+
+        .notification.info .notification-icon {
+            color: var(--accent);
+        }
+
+        .notification.success .notification-icon {
+            color: var(--success);
+        }
+
+        .notification.error .notification-icon {
+            color: var(--danger);
+        }
+
+        .notification.warning .notification-icon {
+            color: var(--warning);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-content h4 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .notification-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        .reviews {
+            margin: 4rem 0 3rem;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+
+        .comments-list {
+            margin-top: 2rem;
+        }
+
+        .comment {
+            background: rgba(var(--accent-rgb), 0.05);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--line);
+        }
+
+        .requirements {
+            margin: 3rem 0 4rem;
+        }
+
+        .requirements ul {
+            list-style: none;
+            color: var(--muted);
+            padding-left: 1rem;
+        }
+
+        .requirements li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .requirements li:before {
+            content: "•";
+            color: var(--accent);
+            position: absolute;
+            left: -1rem;
+        }
+
+        .similar-games-carousel {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 1rem 0;
+            cursor: grab;
+            scroll-behavior: smooth;
+        }
+
+        .similar-games-carousel:active {
+            cursor: grabbing;
+        }
+
+        .similar-game-card {
+            flex: 0 0 160px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .similar-game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+
+        .similar-game-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .similar-game-card-content {
+            padding: 0.75rem;
+        }
+
+        .similar-game-card h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .similar-game-card p {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin: 0.125rem 0;
+        }
+
+        .explore-store-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--btn-primary) 0%, var(--btn-primary-light) 100%);
+            color: white;
+            font-weight: 800;
+            border-radius: var(--radius);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .explore-store-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, var(--btn-primary-light) 0%, var(--btn-primary) 100%);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        @media(max-width: 900px){
+            .poster {
+                height: 500px;
+                margin: 0 0 3rem;
+            }
+            .media-item {
+                width: 85vw;
+            }
+            .media-wrapper {
+                height: 300px;
+            }
+            main {
+                padding: 110px 1rem 2rem;
+            }
+            .fixed-back-container {
+                top: 90px;
+                left: 15px;
+            }
+            .details, .buy-section, .reviews {
+                padding: 1.5rem;
+            }
+        }
+
+        @media(max-width: 768px){
+            body, html {
+                overflow-x: hidden;
+                max-width: 100%;
+            }
+            
+            .main-header {
+                padding: 0.75rem 1rem;
+                height: 60px;
+            }
+            
+            .logo-text {
+                font-size: 1.3rem;
+            }
+            
+            .header-page-title {
+                font-size: 0.95rem;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                white-space: nowrap;
+                max-width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .dropdown-menu {
+                width: 280px;
+                padding-top: 4.5rem;
+            }
+            
+            main {
+                margin-top: 60px;
+                min-height: calc(100vh - 120px);
+                overflow-x: hidden;
+            }
+            
+            .modal {
+                max-width: 95%;
+            }
+            
+            .payment-options {
+                flex-direction: column;
+            }
+            
+            .payment-card {
+                padding: 1rem;
+            }
+            
+            .card-icon {
+                width: 50px;
+                height: 50px;
+                margin-right: 1rem;
+            }
+        }
+
+        @media(max-width: 640px){
+            .poster {
+                height: 400px;
+                margin: 0 0 2.5rem;
+            }
+            .fixed-back-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+            .fixed-back-container {
+                top: 80px;
+                left: 10px;
+            }
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            .media-item {
+                width: 80vw;
+            }
+            .section-title {
+                font-size: 1.25rem;
+                margin-bottom: 1.25rem;
+            }
+            .buy-section {
+                padding: 1.5rem;
+            }
+            .amount {
+                font-size: 2.75rem;
+            }
+            .button-content {
+                padding: 1rem;
+            }
+            .button-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.2rem;
+            }
+            .button-title {
+                font-size: 1.1rem;
+            }
+            main {
+                padding: 100px 0.75rem 1.5rem;
+            }
+        }
+
+        @media(max-width: 480px){
+            .header-page-title {
+                display: none;
+            }
+            
+            .modal {
+                padding: 1.2rem;
+            }
+            
+            .phone-input {
+                font-size: 16px;
+                padding: 1rem;
+            }
+            
+            .payment-option {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .button-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .button-icon {
+                margin-right: 0;
+            }
+            
+            .button-text {
+                text-align: center;
+            }
+            
+            .amount {
+                font-size: 2.25rem;
+            }
+            
+            .payment-methods {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .media-item {
+                width: 85vw;
+            }
+            
+            .media-wrapper {
+                height: 220px;
+            }
+            
+            .fixed-back-container {
+                top: 75px;
+                left: 8px;
+            }
+            
+            .fixed-back-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.75rem;
+            }
+            
+            main {
+                padding: 95px 0.5rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container" onclick="goBackToStore()">
+                <div class="logo-emoji">💧</div>
+                <div class="logo-text">mvura</div>
+            </div>
+            <div class="header-page-title">GAME DETAILS</div>
+            <div class="menu-container">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Dropdown Menu -->
+    <nav class="dropdown-menu" id="dropdownMenu">
+        <button class="menu-close-btn" id="menuCloseBtn">✕</button>
+        <div class="menu-section">
+            <div class="menu-title">Navigation</div>
+            <a href="index.html" class="menu-link"><span class="menu-icon">🏠</span><span>Home</span></a>
+            <a href="store.html" class="menu-link"><span class="menu-icon">🎮</span><span>Games Store</span></a>
+            <a href="publish.html" class="menu-link" id="staticPublishLink"><span class="menu-icon">🚀</span><span>Publish Game</span></a>
+            <a href="news.html" class="menu-link"><span class="menu-icon">📰</span><span>News & Updates</span></a>
+            <a href="about.html" class="menu-link"><span class="menu-icon">👥</span><span>About Us</span></a>
+            <a href="contact.html" class="menu-link"><span class="menu-icon">☎️</span><span>Contact</span></a>
+        </div>
+        <div id="account-menu-container"></div>
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div style="padding: 0.75rem 1rem; color: var(--muted); font-size: 0.9rem;">
+                Switch between light and dark themes
+            </div>
+        </div>
+    </nav>
+
+    <!-- AUTH MODAL (updated with OTP signup) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="auth-close" id="authCloseBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log in</button>
+                <button class="auth-tab" data-tab="signup">Create account</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <input type="tel" id="loginPhone" placeholder="Phone number" autocomplete="tel">
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <span class="toggle-eye" data-for="loginPassword">👁</span>
+                </div>
+                <button class="btn" id="modalLoginBtn">Log in</button>
+                <div class="forgot-link" id="forgotPasswordLink">Forgot password?</div>
+                <div class="demo-hint">Use your phone number and password</div>
+            </div>
+            
+            <!-- Signup Form with OTP (two steps) -->
+            <div id="signupForm" class="auth-form">
+                <!-- Main signup form -->
+                <div id="signupMainForm">
+                    <input type="text" id="signupFirstName" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="signupLastName" placeholder="Last name" autocomplete="family-name">
+                    <input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="tel">
+                    <input type="email" id="signupEmail" placeholder="Email address (for recovery)" autocomplete="email">
+                    <div class="password-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="signupPassword">👁</span>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                        <span class="toggle-eye" data-for="confirmPassword">👁</span>
+                    </div>
+                    <select id="signupRole">
+                        <option value="player" selected>🎮 Player</option>
+                        <option value="developer">🛠️ Developer</option>
+                    </select>
+                    <!-- Terms agreement checkbox -->
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <input type="checkbox" id="agreeTerms" required style="width: auto; accent-color: var(--accent); transform: scale(1.2);">
+                        <label for="agreeTerms" style="color: var(--text); font-size: 0.9rem;">
+                            I agree to the <a href="terms.html" target="_blank" style="color: var(--accent);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color: var(--accent);">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button class="btn" id="modalSignupBtn">Sign up</button>
+                    <div class="demo-hint">Password stored with simple hash (demo)</div>
+                </div>
+
+                <!-- OTP verification section (initially hidden) -->
+                <div id="otpSection" style="display: none;">
+                    <p id="otpMessage" style="color: var(--text); margin-bottom: 1rem;"></p>
+                    <input type="text" id="otpCode" placeholder="6‑digit code" maxlength="6" pattern="\d{6}" style="margin-bottom: 1rem;">
+                    <button class="btn" id="verifyOtpBtn">Verify Code</button>
+                    <button class="btn btn-outline" id="cancelOtpBtn" style="margin-top: 0.5rem;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form -->
+            <div id="forgotPasswordForm" class="auth-form">
+                <h3 style="margin-bottom: 1.5rem;">Reset password</h3>
+                <input type="tel" id="resetPhone" placeholder="Phone number" autocomplete="tel">
+                <input type="email" id="resetEmail" placeholder="Email address (for verification)" autocomplete="email">
+                <button class="btn" id="sendResetCodeBtn">Send reset code</button>
+                
+                <div id="resetCodeSection" style="display: none;">
+                    <div style="margin: 1.5rem 0;"></div>
+                    <input type="text" id="resetCode" placeholder="6‑digit code">
+                    <div class="password-wrapper">
+                        <input type="password" id="resetNewPassword" placeholder="New password">
+                        <span class="toggle-eye" data-for="resetNewPassword">👁</span>
+                    </div>
+                    <button class="btn" id="confirmResetBtn">Reset password</button>
+                    <div class="demo-hint">🔎 Code will appear in console (demo)</div>
+                </div>
+                
+                <div class="back-to-login" id="backToLoginBtn">← Back to login</div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <!-- Fixed Back Button -->
+        <div class="fixed-back-container">
+            <button class="fixed-back-btn" onclick="goBackToStore()">
+                <i class="fas fa-arrow-left"></i> Back to Store
+            </button>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="poster" id="gamePoster">
+            <img id="gameImage" src="" alt="Game Cover">
+        </div>
+
+        <!-- Description -->
+        <p class="description" id="gameDescription"></p>
+
+        <!-- Game Details -->
+        <section class="details">
+            <h1 id="gameTitle">Loading Game...</h1>
+            <div class="details-grid">
+                <div class="details-item">
+                    <div class="details-label">Genre</div>
+                    <div class="details-value" id="gameGenre"></div>
+                </div>
+                <div class="details-item">
+                    <div class="details-label">Release</div>
+                    <div class="details-value" id="gameReleaseYear"></div>
+                </div>
+                <div class="details-item">
+                    <div class="details-label">Mode</div>
+                    <div class="details-value" id="gameMultiplayer"></div>
+                </div>
+                <div class="details-item">
+                    <div class="details-label">Platform</div>
+                    <div class="details-value" id="gamePlatform"></div>
+                </div>
+                <div class="details-item">
+                    <div class="details-label">Size</div>
+                    <div class="details-value" id="gameFileSize"></div>
+                </div>
+                <div class="details-item">
+                    <div class="details-label">Studio</div>
+                    <div class="details-value" id="gameStudio"></div>
+                </div>
+            </div>
+            <div class="price-badge" id="priceBadge">
+                <i class="fas fa-tag"></i> Loading...
+            </div>
+        </section>
+
+        <!-- Buy Section -->
+        <section class="buy-section">
+            <div class="price-display">
+                <div class="price-amount">
+                    <span class="currency">MWK</span>
+                    <span class="amount" id="gamePrice">0</span>
+                </div>
+                <div class="price-note">One-time payment · Lifetime access</div>
+            </div>
+            <button class="buy-button" onclick="openModal()" id="buyButton">
+                <div class="button-content">
+                    <div class="button-icon"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="button-text">
+                        <div class="button-title">Buy Now</div>
+                        <div class="button-subtitle">Instant download · Secure payment</div>
+                    </div>
+                    <div class="button-arrow"><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </button>
+            <div class="payment-security">
+                <div class="security-badge"><i class="fas fa-shield-alt"></i><span>Secured by SSL encryption</span></div>
+                <div class="payment-methods">
+                    <span class="method-badge">Airtel Money</span>
+                    <span class="method-badge">TNM Mpamba</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Media Gallery -->
+        <section class="media-section">
+            <h2 class="section-title"><i class="fas fa-photo-video"></i> Game Media</h2>
+            <div class="media-gallery" id="mediaGallery">
+                <div class="media-item">
+                    <div class="media-header"><i class="fas fa-play-circle"></i> Official Trailer</div>
+                    <div class="media-wrapper">
+                        <iframe src="https://www.youtube.com/embed/txDvXqHeapA" title="Game Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews -->
+        <section class="reviews">
+            <h2 class="section-title"><i class="fas fa-star"></i> Player Reviews</h2>
+            <div class="star-rating">
+                <span class="stars">
+                    <i class="fas fa-star" data-star="1"></i>
+                    <i class="fas fa-star" data-star="2"></i>
+                    <i class="fas fa-star" data-star="3"></i>
+                    <i class="fas fa-star" data-star="4"></i>
+                    <i class="fas fa-star" data-star="5"></i>
+                </span>
+                <span id="avgRating" style="margin-left:10px;font-weight:600;">0/5</span>
+                <span id="downloadCount" style="margin-left:20px;font-size:14px;color:var(--muted)">0 Players</span>
+            </div>
+            <div class="comment-form" style="margin-top:1.5rem;">
+                <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+                    <input type="text" id="commentName" placeholder="Your Name" style="flex:1;min-width:200px;padding:0.75rem;border-radius:var(--radius);border:1px solid var(--line);background:var(--card-bg);color:var(--text);">
+                    <input type="text" id="commentText" placeholder="Your Comment" style="flex:2;min-width:200px;padding:0.75rem;border-radius:var(--radius);border:1px solid var(--line);background:var(--card-bg);color:var(--text);">
+                </div>
+                <button onclick="submitComment()" style="padding:0.75rem 1.5rem;background:linear-gradient(135deg, var(--btn-primary) 0%, var(--btn-primary-light) 100%);border:none;color:white;font-weight:700;border-radius:var(--radius);cursor:pointer;">Submit Review</button>
+            </div>
+            <div class="comments-list" id="commentsList"></div>
+        </section>
+
+        <!-- System Requirements -->
+        <section class="requirements">
+            <h2 class="section-title"><i class="fas fa-laptop-code"></i> System Requirements</h2>
+            <ul id="requirementsList"></ul>
+        </section>
+
+        <!-- You Might Also Like -->
+        <section style="margin:3rem 0 4rem;">
+            <h2 class="section-title"><i class="fas fa-gamepad"></i> You Might Also Like</h2>
+            <div class="similar-games-carousel drag-scroll" id="similarGamesContainer"></div>
+        </section>
+
+        <!-- Explore Store Button -->
+        <div style="text-align:center;margin:4rem 0;">
+            <button class="explore-store-btn" onclick="goBackToStore()"><i class="fas fa-store"></i> Explore More Games</button>
+        </div>
+
+        <!-- Payment Modal -->
+        <div class="modal-overlay" id="paymentModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <img id="modalGameIcon" class="modal-game-icon" src="" alt="Game Icon">
+                    <h3 class="modal-title">Complete Purchase</h3>
+                    <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Game</label>
+                        <div class="form-input" id="modalGameTitle">Loading...</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price</label>
+                        <div class="form-input" id="modalGamePrice">Loading...</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Select Payment Method</label>
+                        <div class="payment-options">
+                            <div class="payment-option active" data-method="airtel">
+                                <div class="payment-icon"><i class="fas fa-mobile-alt"></i></div>
+                                <div>Airtel Money</div>
+                            </div>
+                            <div class="payment-option" data-method="tnm">
+                                <div class="payment-icon"><i class="fas fa-mobile-alt"></i></div>
+                                <div>TNM Mpamba</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-input" id="phoneNumber" placeholder="09xxxxxxx or +2659xxxxxxx" pattern="^(\+265|0)9[0-9]{8}$" required>
+                        <small style="display: block; margin-top: 0.25rem; color: var(--muted); font-size: 0.85rem;">Format: 0991234567 or +265991234567</small>
+                    </div>
+                    <div class="form-group">
+                        <button class="buy-button" id="confirmPayment" style="margin-bottom: 0;">
+                            <div class="button-content">
+                                <div class="button-icon"><i class="fas fa-lock"></i></div>
+                                <div class="button-text">
+                                    <div class="button-title">Confirm Payment via USSD</div>
+                                    <div class="button-subtitle">Secure transaction · Instant verification</div>
+                                </div>
+                                <div class="button-arrow"><i class="fas fa-arrow-right"></i></div>
+                            </div>
+                        </button>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--muted); text-align: center; line-height: 1.5; margin-top: 1.5rem;">You will receive a USSD prompt on your phone to confirm the payment. Download will begin automatically after successful verification.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <nav class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms.html" class="footer-link">Terms of Service</a>
+                <a href="cookies.html" class="footer-link">Cookie Policy</a>
+                <a href="dmca.html" class="footer-link">DMCA</a>
+                <a href="faq.html" class="footer-link">FAQ</a>
+                <a href="accessibility.html" class="footer-link">Accessibility</a>
+            </nav>
+            <p class="footer-info">For game submissions or support: <a href="mailto:ugartworks.comp@gmail.com" class="footer-email">ugartworks.comp@gmail.com</a></p>
+            <div class="footer-copyright">© 2026 mvura Game Platform. All rights reserved. UG ARTWORKS | Designed by James Mlelemba</div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><span>↑</span></button>
+
+    <!-- External Scripts -->
+    <script src="js/games-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+
+    <!-- Page‑Specific Script -->
+    <script>
+        // ========== SETUP CSS VARIABLES ==========
+        function getCssVarRGB(variable) {
+            const color = getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+            if (color.startsWith('#')) {
+                const hex = color.replace('#', '');
+                const r = parseInt(hex.substr(0,2), 16);
+                const g = parseInt(hex.substr(2,2), 16);
+                const b = parseInt(hex.substr(4,2), 16);
+                return [r, g, b];
+            }
+            return [111, 194, 162];
+        }
+        document.documentElement.style.setProperty('--accent-rgb', getCssVarRGB('--accent').join(', '));
+
+        // ============ GLOBAL VARIABLES ============
+        let currentGame = null;
+        let comments = [];
+        let currentRating = 0;
+        let downloads = 0;
+
+        // ============ DOM ELEMENTS ============
+        const gameTitle = document.getElementById('gameTitle');
+        const gameImage = document.getElementById('gameImage');
+        const gameDescription = document.getElementById('gameDescription');
+        const gameGenre = document.getElementById('gameGenre');
+        const gameReleaseYear = document.getElementById('gameReleaseYear');
+        const gameMultiplayer = document.getElementById('gameMultiplayer');
+        const gamePlatform = document.getElementById('gamePlatform');
+        const gameFileSize = document.getElementById('gameFileSize');
+        const gameStudio = document.getElementById('gameStudio');
+        const priceBadge = document.getElementById('priceBadge');
+        const gamePrice = document.getElementById('gamePrice');
+        const buyButton = document.getElementById('buyButton');
+        const mediaGallery = document.getElementById('mediaGallery');
+        const requirementsList = document.getElementById('requirementsList');
+        const similarGamesContainer = document.getElementById('similarGamesContainer');
+        const commentsList = document.getElementById('commentsList');
+        const avgRating = document.getElementById('avgRating');
+        const downloadCount = document.getElementById('downloadCount');
+        const backToTopBtn = document.getElementById('backToTop');
+
+        // ============ UTILITY FUNCTIONS ============
+        class MVURAUtils {
+            static validatePhoneNumber(phone) {
+                const pattern = /^(\+265|0)9[0-9]{8}$/;
+                return pattern.test(phone.trim());
+            }
+            static formatPhoneNumber(phone) {
+                let cleaned = phone.trim();
+                if (cleaned.startsWith('+265')) cleaned = '0' + cleaned.slice(4);
+                if (cleaned.startsWith('09')) return cleaned;
+                return cleaned;
+            }
+            static showNotification(message, type = 'info', title = '') {
+                const existing = document.querySelector('.notification');
+                if (existing) existing.remove();
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                const icons = { info: 'fas fa-info-circle', success: 'fas fa-check-circle', error: 'fas fa-times-circle', warning: 'fas fa-exclamation-triangle' };
+                notification.innerHTML = `<div class="notification-icon"><i class="${icons[type] || icons.info}"></i></div><div class="notification-content">${title ? `<h4>${title}</h4>` : ''}<p>${message}</p></div>`;
+                document.body.appendChild(notification);
+                setTimeout(() => notification.classList.add('show'), 10);
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }, 5000);
+            }
+            static showAlert(message, type = 'info') {
+                const title = type.charAt(0).toUpperCase() + type.slice(1);
+                this.showNotification(message, type, title);
+            }
+        }
+
+        // ============ PAYMENT SYSTEM ============
+        class MVURAPayment {
+            constructor() {
+                this.paymentModal = document.getElementById('paymentModal');
+                this.currentGame = null;
+                this.downloadProgressInterval = null;
+                this.init();
+            }
+            async initiatePayment(gameId, amount, phoneNumber, provider = 'airtel') {
+                try {
+                    if (!MVURAUtils.validatePhoneNumber(phoneNumber)) {
+                        throw new Error('Invalid phone number format. Use Malawi format: 0991234567 or +265991234567');
+                    }
+                    const formattedPhone = MVURAUtils.formatPhoneNumber(phoneNumber);
+                    MVURAUtils.showNotification('Initiating payment...', 'info');
+                    const confirmBtn = document.getElementById('confirmPayment');
+                    if (confirmBtn) {
+                        confirmBtn.innerHTML = `<div class="button-content"><div class="button-icon"><i class="fas fa-circle-notch fa-spin"></i></div><div class="button-text"><div class="button-title">Processing...</div><div class="button-subtitle">Connecting to payment gateway</div></div></div>`;
+                        confirmBtn.disabled = true;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    const reference = `TX${Date.now()}${Math.floor(Math.random() * 1000)}`;
+                    MVURAUtils.showNotification('Check your phone for USSD prompt', 'success');
+                    this.pollPaymentStatus(reference, gameId, amount);
+                    return { success: true, reference: reference };
+                } catch (error) {
+                    console.error('Payment error:', error);
+                    MVURAUtils.showNotification(`Payment failed: ${error.message}`, 'error');
+                    const confirmBtn = document.getElementById('confirmPayment');
+                    if (confirmBtn) {
+                        confirmBtn.innerHTML = `<div class="button-content"><div class="button-icon"><i class="fas fa-lock"></i></div><div class="button-text"><div class="button-title">Confirm Payment via USSD</div><div class="button-subtitle">Secure transaction · Instant verification</div></div><div class="button-arrow"><i class="fas fa-arrow-right"></i></div></div>`;
+                        confirmBtn.disabled = false;
+                    }
+                    return { success: false, error: error.message };
+                }
+            }
+            async pollPaymentStatus(reference, gameId, amount) {
+                let attempts = 0;
+                const maxAttempts = 30;
+                const pollInterval = setInterval(async () => {
+                    attempts++;
+                    if (attempts > maxAttempts) {
+                        clearInterval(pollInterval);
+                        MVURAUtils.showNotification('Payment timeout. Please try again.', 'warning');
+                        return;
+                    }
+                    if (attempts === 3) {
+                        clearInterval(pollInterval);
+                        this.handlePaymentSuccess(reference, gameId, amount);
+                    }
+                }, 5000);
+            }
+            async handlePaymentSuccess(reference, gameId, amount) {
+                this.closePaymentModal();
+                MVURAUtils.showNotification('Payment confirmed! Starting download...', 'success');
+                const downloadUrl = await this.getDownloadUrl(gameId);
+                if (downloadUrl) {
+                    this.startDownload(downloadUrl, gameId);
+                    await this.trackDownload(gameId, amount, reference);
+                    incrementDownloads();
+                }
+            }
+            async getDownloadUrl(gameId) {
+                try {
+                    return `#download-${gameId}`;
+                } catch (error) {
+                    console.error('Get download URL error:', error);
+                    return `#download-${gameId}`;
+                }
+            }
+            startDownload(url, gameId) {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = url;
+                downloadLink.download = `${gameId}.apk`;
+                downloadLink.style.display = 'none';
+                document.body.appendChild(downloadLink);
+                this.showDownloadProgress(gameId);
+                setTimeout(() => {
+                    downloadLink.click();
+                    setTimeout(() => {
+                        document.body.removeChild(downloadLink);
+                    }, 100);
+                }, 3000);
+            }
+            showDownloadProgress(gameId) {
+                const progressOverlay = document.createElement('div');
+                progressOverlay.className = 'download-progress-overlay';
+                progressOverlay.innerHTML = `<div class="download-progress-modal"><h3>Downloading Game</h3><div class="progress-container"><div class="progress-bar" id="downloadProgressBar"></div><div class="progress-text" id="downloadProgressText">0%</div></div><p>Please wait while your game downloads...</p><button class="btn btn-small" id="cancelDownloadBtn">Cancel</button></div>`;
+                document.body.appendChild(progressOverlay);
+                let progress = 0;
+                this.downloadProgressInterval = setInterval(() => {
+                    progress += Math.random() * 10 + 5;
+                    if (progress > 100) progress = 100;
+                    const progressBar = document.getElementById('downloadProgressBar');
+                    const progressText = document.getElementById('downloadProgressText');
+                    if (progressBar) progressBar.style.width = `${progress}%`;
+                    if (progressText) progressText.textContent = `${Math.round(progress)}%`;
+                    if (progress >= 100) {
+                        clearInterval(this.downloadProgressInterval);
+                        setTimeout(() => {
+                            document.body.removeChild(progressOverlay);
+                            MVURAUtils.showNotification('Download complete! Install and enjoy your game.', 'success');
+                            setTimeout(() => { goBackToStore(); }, 2000);
+                        }, 1000);
+                    }
+                }, 300);
+                const cancelBtn = document.getElementById('cancelDownloadBtn');
+                if (cancelBtn) {
+                    cancelBtn.addEventListener('click', () => {
+                        clearInterval(this.downloadProgressInterval);
+                        document.body.removeChild(progressOverlay);
+                        MVURAUtils.showNotification('Download cancelled', 'warning');
+                    });
+                }
+            }
+            async trackDownload(gameId, amount, reference) {
+                try {
+                    const downloads = JSON.parse(localStorage.getItem('mvura_downloads') || '[]');
+                    downloads.push({ gameId, gameTitle: this.currentGame?.title || 'Unknown Game', amount, reference, timestamp: new Date().toISOString(), status: 'completed' });
+                    localStorage.setItem('mvura_downloads', JSON.stringify(downloads));
+                    console.log('Download tracked:', { gameId, amount, reference });
+                } catch (error) {
+                    console.error('Track download error:', error);
+                }
+            }
+            openPaymentModal(gameTitle, gamePrice, gameId) {
+                if (this.paymentModal) {
+                    const modalGameTitle = document.getElementById('modalGameTitle');
+                    const modalGamePrice = document.getElementById('modalGamePrice');
+                    const modalGameIcon = document.getElementById('modalGameIcon');
+                    if (modalGameTitle) modalGameTitle.textContent = gameTitle;
+                    if (modalGamePrice) modalGamePrice.textContent = gamePrice;
+                    if (modalGameIcon && currentGame) {
+                        modalGameIcon.src = currentGame.image;
+                        modalGameIcon.alt = currentGame.title;
+                    }
+                    this.currentGame = { id: gameId, title: gameTitle, price: gamePrice };
+                    this.paymentModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    const phoneInput = document.getElementById('phoneNumber');
+                    if (phoneInput) phoneInput.value = '';
+                }
+            }
+            closePaymentModal() {
+                if (this.paymentModal) {
+                    this.paymentModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                    this.currentGame = null;
+                    const phoneInput = document.getElementById('phoneNumber');
+                    const confirmBtn = document.getElementById('confirmPayment');
+                    if (phoneInput) phoneInput.value = '';
+                    if (confirmBtn) {
+                        confirmBtn.innerHTML = `<div class="button-content"><div class="button-icon"><i class="fas fa-lock"></i></div><div class="button-text"><div class="button-title">Confirm Payment via USSD</div><div class="button-subtitle">Secure transaction · Instant verification</div></div><div class="button-arrow"><i class="fas fa-arrow-right"></i></div></div>`;
+                        confirmBtn.disabled = false;
+                    }
+                }
+            }
+            init() {
+                const modalClose = document.getElementById('modalClose');
+                const confirmPayment = document.getElementById('confirmPayment');
+                const paymentOptions = document.querySelectorAll('.payment-option');
+                if (modalClose) modalClose.addEventListener('click', () => this.closePaymentModal());
+                if (confirmPayment) {
+                    confirmPayment.addEventListener('click', async () => {
+                        const phoneInput = document.getElementById('phoneNumber');
+                        const selectedOption = document.querySelector('.payment-option.active');
+                        if (!phoneInput || !selectedOption || !this.currentGame) return;
+                        const phoneNumber = phoneInput.value;
+                        const provider = selectedOption.dataset.method;
+                        if (!phoneNumber.trim()) {
+                            MVURAUtils.showNotification('Please enter your phone number', 'warning');
+                            phoneInput.focus();
+                            return;
+                        }
+                        const priceText = this.currentGame.price.toString();
+                        const price = parseFloat(priceText.replace(/[^0-9.]/g, ''));
+                        await this.initiatePayment(this.currentGame.id, price, phoneNumber, provider);
+                    });
+                }
+                if (paymentOptions.length > 0) {
+                    paymentOptions.forEach(option => {
+                        option.addEventListener('click', () => {
+                            paymentOptions.forEach(o => o.classList.remove('active'));
+                            option.classList.add('active');
+                        });
+                    });
+                }
+                this.paymentModal?.addEventListener('click', (e) => {
+                    if (e.target === this.paymentModal) this.closePaymentModal();
+                });
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.paymentModal?.classList.contains('active')) {
+                        this.closePaymentModal();
+                    }
+                });
+                const phoneInput = document.getElementById('phoneNumber');
+                if (phoneInput) {
+                    phoneInput.addEventListener('input', function(e) {
+                        let value = e.target.value;
+                        if (value.startsWith('09') && value.length === 10 && !value.startsWith('+265')) {
+                            e.target.value = '+265' + value.slice(1);
+                        }
+                    });
+                }
+                console.log('MVURA Payment system initialized');
+            }
+        }
+
+        // Initialize payment system
+        window.MVURA = window.MVURA || {};
+        window.MVURA.utils = MVURAUtils;
+        window.MVURA.payment = new MVURAPayment();
+
+        // ============ GAME LOADING ============
+        function loadGame() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const gameId = parseInt(urlParams.get('gameId'));
+            if (!gameId || isNaN(gameId)) { window.location.href = 'store.html'; return; }
+            currentGame = games.find(game => game.id === gameId);
+            if (!currentGame) { window.location.href = 'store.html'; return; }
+            document.title = `${currentGame.title} - mvura Games`;
+            updateGameDisplay();
+            loadScreenshots();
+            loadRequirements();
+            loadSimilarGames();
+            loadComments();
+            loadDownloads();
+        }
+
+        function updateGameDisplay() {
+            if (!currentGame) return;
+            const priceMWK = calculatePriceMWK(currentGame);
+            gameTitle.textContent = `${currentGame.title} — ${currentGame.genre.charAt(0).toUpperCase() + currentGame.genre.slice(1)} Edition`;
+            gameImage.src = currentGame.image;
+            gameImage.alt = currentGame.title;
+            gameDescription.innerHTML = `<strong>${currentGame.title}</strong> ${currentGame.description}`;
+            gameGenre.textContent = currentGame.genre.charAt(0).toUpperCase() + currentGame.genre.slice(1);
+            gameReleaseYear.textContent = currentGame.releaseYear;
+            gameMultiplayer.textContent = currentGame.multiplayer ? 'Multiplayer' : 'Single Player';
+            gamePlatform.textContent = currentGame.platform.toUpperCase();
+            gameFileSize.textContent = currentGame.fileSize;
+            if (currentGame.studio) {
+                const studioLink = document.createElement('a');
+                studioLink.href = `admin/account.html?studio=${encodeURIComponent(currentGame.studio)}`;
+                studioLink.textContent = currentGame.studio;
+                studioLink.style.color = 'var(--accent)';
+                studioLink.style.textDecoration = 'underline';
+                studioLink.style.cursor = 'pointer';
+                gameStudio.innerHTML = '';
+                gameStudio.appendChild(studioLink);
+            } else {
+                gameStudio.textContent = 'Unknown';
+            }
+            gamePrice.textContent = priceMWK.toLocaleString();
+            priceBadge.innerHTML = `<i class="fas fa-tag"></i> MWK ${priceMWK.toLocaleString()}`;
+            avgRating.textContent = `${currentGame.rating}/5`;
+        }
+
+        function calculatePriceMWK(game) {
+            const USD_TO_MWK = 1700;
+            let usdPrice = 0;
+            if (game.price === 'free') return 0;
+            if (game.price === 'paid') {
+                switch(game.platform) {
+                    case 'mobile': usdPrice = 3; break;
+                    case 'web': usdPrice = 5; break;
+                    case 'pc': usdPrice = 20; break;
+                    case 'console': usdPrice = 30; break;
+                }
+            } else if (game.price === 'premium') {
+                switch(game.platform) {
+                    case 'mobile': usdPrice = 10; break;
+                    case 'web': usdPrice = 15; break;
+                    case 'pc': usdPrice = 40; break;
+                    case 'console': usdPrice = 60; break;
+                }
+            }
+            const adjustment = Math.floor(Math.random() * 15);
+            return Math.round((usdPrice + adjustment) * USD_TO_MWK);
+        }
+
+        function loadScreenshots() {
+            if (!currentGame) return;
+            const screenshots = currentGame.screenshots || generateDefaultScreenshots(currentGame.id);
+            screenshots.forEach((img, i) => {
+                const screenshotItem = document.createElement('div');
+                screenshotItem.className = 'media-item';
+                screenshotItem.innerHTML = `<div class="media-header"><i class="fas fa-camera"></i> Screenshot ${i + 1}</div><div class="media-wrapper"><img src="${img}" alt="${currentGame.title} Screenshot ${i + 1}" loading="lazy"></div>`;
+                mediaGallery.appendChild(screenshotItem);
+            });
+        }
+
+        function generateDefaultScreenshots(gameId) {
+            return [
+                `https://picsum.photos/600/360?random=${gameId}1`,
+                `https://picsum.photos/600/360?random=${gameId}2`,
+                `https://picsum.photos/600/360?random=${gameId}3`,
+                `https://picsum.photos/600/360?random=${gameId}4`,
+                `https://picsum.photos/600/360?random=${gameId}5`
+            ];
+        }
+
+        function loadRequirements() {
+            if (!currentGame) return;
+            const requirements = getRequirementsHTML(currentGame.platform);
+            requirementsList.innerHTML = requirements;
+        }
+
+        function getRequirementsHTML(platform) {
+            const requirements = {
+                mobile: ["OS: Android 8+ / iOS 12+","CPU: Octa-core 1.8GHz+","RAM: 4 GB","GPU: Adreno 630 / Mali-G72","Storage: 2 GB free space"],
+                pc: ["OS: Windows 10 (64-bit)","CPU: Intel i5-8400 / Ryzen 5 2600","RAM: 8 GB","GPU: GTX 1060 / RX 580","Storage: 10 GB free space"],
+                console: ["OS: PlayStation 5 / Xbox Series X","CPU: Custom 8-core","RAM: 16 GB","GPU: Custom RDNA 2","Storage: 50 GB free space"],
+                web: ["OS: Chrome 80+, Firefox 75+","CPU: Dual-core 2.0GHz+","RAM: 4 GB","GPU: Integrated GPU","Storage: 1 GB free space"]
+            };
+            const req = requirements[platform] || requirements.pc;
+            return req.map(item => `<li>${item}</li>`).join('');
+        }
+
+        function loadSimilarGames() {
+            if (!currentGame) return;
+            const similarGames = games.filter(game => game.id !== currentGame.id && (game.genre === currentGame.genre || game.platform === currentGame.platform)).slice(0, 3);
+            similarGamesContainer.innerHTML = similarGames.map(game => {
+                const priceMWK = calculatePriceMWK(game);
+                return `<div class="similar-game-card" onclick="viewGame(${game.id})"><img src="${game.image}" alt="${game.title}" loading="lazy"><div class="similar-game-card-content"><h4>${game.title}</h4><p>Genre: ${game.genre}</p><p>Price: MWK ${priceMWK.toLocaleString()}</p></div></div>`;
+            }).join('');
+        }
+
+        function viewGame(gameId) {
+            window.location.href = `game.html?gameId=${gameId}`;
+        }
+
+        function loadComments() {
+            const savedComments = localStorage.getItem(`gameComments_${currentGame.id}`);
+            if (savedComments) {
+                comments = JSON.parse(savedComments);
+            } else {
+                comments = [
+                    {name: "Eve T.", text: "Amazing game! The graphics and gameplay are fantastic.", avatar: "https://i.pravatar.cc/40?img=31", rating: 5},
+                    {name: "Frank L.", text: `Love the ${currentGame.genre} mechanics. Very well done!`, avatar: "https://i.pravatar.cc/40?img=32", rating: 4},
+                    {name: "Grace P.", text: "Needs more content but overall fun!", avatar: "https://i.pravatar.cc/40?img=33", rating: 4}
+                ];
+                saveComments();
+            }
+            renderComments();
+        }
+
+        function saveComments() {
+            localStorage.setItem(`gameComments_${currentGame.id}`, JSON.stringify(comments));
+        }
+
+        function loadDownloads() {
+            downloads = parseInt(localStorage.getItem(`gameDownloads_${currentGame.id}`)) || 0;
+            updateDownloadCount();
+        }
+
+        function updateDownloadCount() {
+            downloadCount.textContent = `${currentGame.players} Players · ${downloads} Downloads`;
+        }
+
+        function incrementDownloads() {
+            downloads++;
+            localStorage.setItem(`gameDownloads_${currentGame.id}`, downloads);
+            updateDownloadCount();
+        }
+
+        function initStarRating() {
+            const stars = document.querySelectorAll('.star-rating i');
+            stars.forEach(star => {
+                star.addEventListener('mouseover', () => highlightStars(parseInt(star.dataset.star)));
+                star.addEventListener('mouseout', () => highlightStars(currentRating));
+                star.addEventListener('click', () => {
+                    currentRating = parseInt(star.dataset.star);
+                    highlightStars(currentRating);
+                    updateAvgRating(currentRating);
+                });
+            });
+        }
+
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star-rating i');
+            stars.forEach(star => {
+                if (parseInt(star.dataset.star) <= rating) {
+                    star.classList.add('filled');
+                    star.style.color = 'var(--accent)';
+                } else {
+                    star.classList.remove('filled');
+                    star.style.color = 'var(--muted)';
+                }
+            });
+        }
+
+        function updateAvgRatingComments() {
+            if (comments.length === 0) return;
+            let sum = 0;
+            comments.forEach(c => sum += c.rating);
+            const avg = sum / comments.length;
+            const gameRating = Math.max(currentGame.rating, avg).toFixed(1);
+            avgRating.textContent = `${gameRating}/5`;
+        }
+
+        function renderComments() {
+            commentsList.innerHTML = "";
+            comments.forEach(c => {
+                const div = document.createElement('div');
+                div.className = "comment";
+                div.innerHTML = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><img src="${c.avatar}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;"><div style="flex:1"><strong style="display:block;margin-bottom:2px;">${c.name}</strong><div>${renderCommentStars(c.rating)}</div></div></div><p style="margin:0;color:var(--muted);">${c.text}</p>`;
+                commentsList.appendChild(div);
+            });
+            updateAvgRatingComments();
+        }
+
+        function renderCommentStars(r) {
+            let html = "";
+            for (let i = 1; i <= 5; i++) {
+                html += `<i class="fas fa-star" style="color:${i <= r ? 'var(--accent)' : 'var(--muted)'};font-size:12px;margin-right:2px;"></i>`;
+            }
+            return html;
+        }
+
+        function submitComment() {
+            const nameInput = document.getElementById('commentName');
+            const textInput = document.getElementById('commentText');
+            if (nameInput.value.trim() && textInput.value.trim()) {
+                const rating = currentRating || 5;
+                comments.push({
+                    name: nameInput.value.trim(),
+                    text: textInput.value.trim(),
+                    avatar: `https://i.pravatar.cc/40?img=${Math.floor(Math.random() * 70)}`,
+                    rating: rating
+                });
+                saveComments();
+                renderComments();
+                nameInput.value = "";
+                textInput.value = "";
+                currentRating = 0;
+                highlightStars(currentRating);
+            } else {
+                MVURAUtils.showAlert("Please enter your name and comment!", "warning");
+            }
+        }
+
+        function updateAvgRating(rating) {}
+
+        function enableDragScroll() {
+            const carousels = document.querySelectorAll('.drag-scroll');
+            carousels.forEach(carousel => {
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+                carousel.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    carousel.classList.add('active');
+                    startX = e.pageX - carousel.offsetLeft;
+                    scrollLeft = carousel.scrollLeft;
+                });
+                carousel.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    carousel.classList.remove('active');
+                });
+                carousel.addEventListener('mouseup', () => {
+                    isDown = false;
+                    carousel.classList.remove('active');
+                });
+                carousel.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - carousel.offsetLeft;
+                    const walk = (x - startX) * 2;
+                    carousel.scrollLeft = scrollLeft - walk;
+                });
+            });
+        }
+
+        function openModal() {
+            if (!currentGame) return;
+            const priceMWK = calculatePriceMWK(currentGame);
+            MVURA.payment.openPaymentModal(currentGame.title, `MWK ${priceMWK.toLocaleString()}`, currentGame.id);
+        }
+
+        function closeModal() {
+            MVURA.payment.closePaymentModal();
+        }
+
+        function goBackToStore() {
+            window.location.href = 'store.html';
+        }
+
+        window.addEventListener('scroll', () => {
+            backToTopBtn.classList.toggle('visible', window.pageYOffset > 300);
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            backToTopBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => backToTopBtn.style.transform = '', 200);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('paymentModal')?.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        function init() {
+            loadGame();
+            initStarRating();
+            enableDragScroll();
+            window.addEventListener('scroll', () => {
+                backToTopBtn.classList.toggle('visible', window.pageYOffset > 300);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+
+        matchMedia("(prefers-color-scheme: dark)").addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {
+                document.body.classList.toggle('dark', e.matches);
+                document.getElementById('themeToggle').textContent = e.matches ? '☀️' : '🌙';
+            }
+        });
+    </script>
+</body>
+</html>
